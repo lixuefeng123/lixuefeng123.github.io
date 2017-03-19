@@ -8,14 +8,14 @@
     <atom:link href="/atom.xml" rel="self" type="application/rss+xml"/>
     
     <description>This is my blog</description>
-    <pubDate>Fri, 17 Mar 2017 13:00:57 GMT</pubDate>
+    <pubDate>Sun, 19 Mar 2017 11:13:59 GMT</pubDate>
     <generator>http://hexo.io/</generator>
     
     <item>
-      <title>Hello World</title>
-      <link>http://yoursite.com/2017/03/17/hello-world/</link>
-      <guid>http://yoursite.com/2017/03/17/hello-world/</guid>
-      <pubDate>Fri, 17 Mar 2017 13:00:57 GMT</pubDate>
+      <title>Hexo相关的使用方式——第一篇文章</title>
+      <link>http://yoursite.com/2017/03/19/hello-world/</link>
+      <guid>http://yoursite.com/2017/03/19/hello-world/</guid>
+      <pubDate>Sun, 19 Mar 2017 11:13:59 GMT</pubDate>
       <description>
       
         &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.
@@ -33,7 +33,7 @@
 <p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
 ]]></content:encoded>
       
-      <comments>http://yoursite.com/2017/03/17/hello-world/#disqus_thread</comments>
+      <comments>http://yoursite.com/2017/03/19/hello-world/#disqus_thread</comments>
     </item>
     
     <item>
@@ -61,13 +61,61 @@
     </item>
     
     <item>
-      <title>jvm的jdk命令行工具和java多线程相关知识点学习(待补充)</title>
+      <title>Sun的jdk命令行工具</title>
       <link>http://yoursite.com/2017/03/16/jvm%E7%9A%84jdk%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%E5%92%8Cjava%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/</link>
       <guid>http://yoursite.com/2017/03/16/jvm%E7%9A%84jdk%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%E5%92%8Cjava%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/</guid>
       <pubDate>Thu, 16 Mar 2017 03:58:43 GMT</pubDate>
       <description>
       
+        &lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;名称&lt;/th&gt;
+&lt;th&gt;主要作用&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;jps&lt;/td&gt;
+&lt;td&gt;JVM Process Status Tool,显示指定系统内所有的HotSpot虚拟机进程&lt;/
+      
       </description>
+      
+      <content:encoded><![CDATA[<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>主要作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jps</td>
+<td>JVM Process Status Tool,显示指定系统内所有的HotSpot虚拟机进程</td>
+</tr>
+<tr>
+<td>jstat</td>
+<td>JVM Statistics Monitoring Tool,用于收集Hotspot虚拟机各方面的运行数据</td>
+</tr>
+<tr>
+<td>jinfo</td>
+<td>Configuration Info for Java,显示虚拟机配置信息</td>
+</tr>
+<tr>
+<td>jmap</td>
+<td>Memory Map for Java,生成虚拟机的内存转储快照（heapdump文件）</td>
+</tr>
+<tr>
+<td>jhat</td>
+<td>JVM Heap Dump Browser，用于分析heapdump文件，它会建立一个HTTP/HTML服务器，让用户可以在浏览器上查看分析结果</td>
+</tr>
+<tr>
+<td>jstack</td>
+<td>Stack Trace for Java,显示虚拟机的线程快照</td>
+</tr>
+</tbody>
+</table>
+]]></content:encoded>
       
       <comments>http://yoursite.com/2017/03/16/jvm%E7%9A%84jdk%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%E5%92%8Cjava%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/#disqus_thread</comments>
     </item>
