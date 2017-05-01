@@ -6,18 +6,35 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>搜索之es的学习(待补充) | blog</title>
+  <title>搜索——ElasticSearch的学习笔记 | blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="This is my blog">
+  <meta name="description" content="一、ElasticSearch使用简介最近在学习ElasticSearch的相关知识点，已经完整的阅读了ElasticSearch权威指南这本书，为了学有所获，现在将自己的学习笔记整理如下，仅供大家参考。我将从如下几个方面来向大家介绍。
+
+ElasticSearch 5.2.2的安装使用；
+ElasticSearch 5.2.2的基础概念；
+ElasticSearch 5.2.2的简单查询；
+El">
 <meta property="og:type" content="article">
-<meta property="og:title" content="搜索之es的学习(待补充)">
+<meta property="og:title" content="搜索——ElasticSearch的学习笔记">
 <meta property="og:url" content="http://yoursite.com/2017/03/16/搜索之es的学习/index.html">
 <meta property="og:site_name" content="blog">
-<meta property="og:description" content="This is my blog">
-<meta property="og:updated_time" content="2017-03-17T11:46:17.000Z">
+<meta property="og:description" content="一、ElasticSearch使用简介最近在学习ElasticSearch的相关知识点，已经完整的阅读了ElasticSearch权威指南这本书，为了学有所获，现在将自己的学习笔记整理如下，仅供大家参考。我将从如下几个方面来向大家介绍。
+
+ElasticSearch 5.2.2的安装使用；
+ElasticSearch 5.2.2的基础概念；
+ElasticSearch 5.2.2的简单查询；
+El">
+<meta property="og:image" content="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/4fadaefdc5ddbf07c200bb473e898225.png">
+<meta property="og:updated_time" content="2017-05-01T10:13:47.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="搜索之es的学习(待补充)">
-<meta name="twitter:description" content="This is my blog">
+<meta name="twitter:title" content="搜索——ElasticSearch的学习笔记">
+<meta name="twitter:description" content="一、ElasticSearch使用简介最近在学习ElasticSearch的相关知识点，已经完整的阅读了ElasticSearch权威指南这本书，为了学有所获，现在将自己的学习笔记整理如下，仅供大家参考。我将从如下几个方面来向大家介绍。
+
+ElasticSearch 5.2.2的安装使用；
+ElasticSearch 5.2.2的基础概念；
+ElasticSearch 5.2.2的简单查询；
+El">
+<meta name="twitter:image" content="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/4fadaefdc5ddbf07c200bb473e898225.png">
   
     <link rel="alternative" href="/atom.xml" title="blog" type="application/atom+xml">
   
@@ -156,7 +173,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      搜索之es的学习(待补充)
+      搜索——ElasticSearch的学习笔记
     </h1>
   
 
@@ -175,7 +192,136 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h3 id="一、ElasticSearch使用简介"><a href="#一、ElasticSearch使用简介" class="headerlink" title="一、ElasticSearch使用简介"></a>一、ElasticSearch使用简介</h3><p>最近在学习ElasticSearch的相关知识点，已经完整的阅读了ElasticSearch权威指南这本书，为了学有所获，现在将自己的学习笔记整理如下，仅供大家参考。我将从如下几个方面来向大家介绍。</p>
+<ul>
+<li>ElasticSearch 5.2.2的安装使用；</li>
+<li>ElasticSearch 5.2.2的基础概念；</li>
+<li>ElasticSearch 5.2.2的简单查询；</li>
+<li>ElasticSearch 5.2.2的配置相关；</li>
+<li>ElasticSearch 5.2.2的基本操作。</li>
+</ul>
+<p>ElasticSearch是一个实时分布式搜索和分析引擎。它让你以前所未有的速度处理大数据成为可能。它用于全文搜索、结构化搜索、分析以及将这三者混合使用。<br>ElasticSearch是一个基于Apache Lucene（TM）的开源搜索引擎。无论是在开源还是专有领域，Lucene可以被认为是迄今为止最先进、性能最好、功能最全的搜索引擎库。ElasticSearch也是用Java开发并使用Lucene作为其核心来实现所有索引和搜索的功能，但是它的目的是通过简单的RESTful Api来隐藏Lucene的复杂性，从而让全文搜索变得简单。</p>
+<h3 id="二、ElasticSearch-5-2-2的安装使用："><a href="#二、ElasticSearch-5-2-2的安装使用：" class="headerlink" title="二、ElasticSearch 5.2.2的安装使用："></a>二、ElasticSearch 5.2.2的安装使用：</h3><ul>
+<li>安装ElasticSearch</li>
+</ul>
+<p>安装ElasticSearch唯一的要求是安装官方新版的Java，地址：www.java.com;<br>你可以从 elasticsearch.org/download 下载最新版本的ElasticSearch。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">curl -L -O http://download.elasticsearch.org/PATH/TO/VERSION.zip &lt;1&gt; </div><div class="line">unzip elasticsearch-$VERSION.zip</div><div class="line">cd elasticsearch-$VERSION</div></pre></td></tr></table></figure>
+<ul>
+<li>运行ElasticSearch</li>
+</ul>
+<p>ElasticSearch已经准备就绪，执行以下命令可在前台启动：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./bin/elasticsearch</div></pre></td></tr></table></figure>
+<p>如果想在后台以守护进程模式运行，添加-d参数。</p>
+<p>打开另一个终端进行测试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl &apos;http://localhost:9200/?pretty&apos;</div></pre></td></tr></table></figure>
+<p>你能看到如下返回信息：</p>
+<p><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/4fadaefdc5ddbf07c200bb473e898225.png" alt="screenshot.png"></p>
+<p>当你看到上图中的信息之后，说明你的ElasticSearch集群已经启动并且正常运行，接下来我们可以开始各种实验了。</p>
+<h3 id="三、ElasticSearch-5-2-2的基础概念："><a href="#三、ElasticSearch-5-2-2的基础概念：" class="headerlink" title="三、ElasticSearch 5.2.2的基础概念："></a>三、ElasticSearch 5.2.2的基础概念：</h3><p>本节是ElasticSearch5.2.2的基础概念部分的介绍，主要介绍集群，节点，索引，类型，文档，分片，副本等基础概念。</p>
+<h5 id="基本概念：简单的介绍下，详细的见Basic-Concepts"><a href="#基本概念：简单的介绍下，详细的见Basic-Concepts" class="headerlink" title="基本概念：简单的介绍下，详细的见Basic Concepts"></a>基本概念：简单的介绍下，详细的见<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/_basic_concepts.html" target="_blank" rel="external">Basic Concepts</a></h5><ul>
+<li>集群（cluster）：集群由一个或者多个节点组成，由名称唯一标识；</li>
+<li>节点（node）：一个单独的ElasticSearch实例；</li>
+<li>索引（index）：文档的集合；</li>
+<li>类型（type）：索引的逻辑分类/分区；</li>
+<li>文档（document）：能够被索引的信息基础单元；</li>
+<li>分片（shard）：索引的物理分区，是一个最小的Lucene索引单元。分为primary shard（主分片）和replica shard（简称replicas）。</li>
+<li>副本/备份（replicas）:主分片的备份。</li>
+</ul>
+<h5 id="类比关系数据库"><a href="#类比关系数据库" class="headerlink" title="类比关系数据库"></a>类比关系数据库</h5><p>其中索引、类型、文档的概念可以类比关系型数据库</p>
+<table>
+<thead>
+<tr>
+<th>ElasticSearch</th>
+<th>关系型数据库</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>索引（index）</td>
+<td>数据库（database）</td>
+</tr>
+<tr>
+<td>类型（type）</td>
+<td>表（table）</td>
+</tr>
+<tr>
+<td>文档（document）</td>
+<td>行记录（row）</td>
+</tr>
+<tr>
+<td>字段（field）</td>
+<td>列（column）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="四、ElasticSearch-5-2-2的简单查询："><a href="#四、ElasticSearch-5-2-2的简单查询：" class="headerlink" title="四、ElasticSearch 5.2.2的简单查询："></a>四、ElasticSearch 5.2.2的简单查询：</h3><h5 id="请求体查询"><a href="#请求体查询" class="headerlink" title="请求体查询"></a>请求体查询</h5><p>简单查询语句（lite）是一种有效的命令行adhoc查询。但是，如果你想要善用搜索，你必须使用请求体查询（request body search）API。之所以这么称呼，是因为大多数的参数以Json格式所容纳而非查询字符串。本节主要介绍如何使用Elasticsearch进行简单的查询，查询方式分为如下两种方式。</p>
+<ul>
+<li>通过REST request URI发送查询参数；</li>
+<li>通过REST request body发送查询参数。</li>
+</ul>
+<p>首先看一个空查询。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">GET /_search</div><div class="line">&#123;&#125;</div></pre></td></tr></table></figure>
+<p>这是一个空查询语句，空查询将会返回索引中所有的文档，同字符串查询一样，你可以查询一个，多个或_all索引（indices）或类型（types）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">GET /_search</div><div class="line">&#123;</div><div class="line">	&quot;from&quot;:30,</div><div class="line">	&quot;size&quot;:10</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>因为携带交互数据的GET请求并不被广泛支持，所以search API同样支持POST请求，需要注意一点，Elasticsearch和sql的区别，Es一旦获得了结果，Es就彻底完成了请求，且不保存任何服务端资源或者状态信息，这和SQL里一些得到结果子集再通过状态信息（如游标）得到剩下结果集的情况不同。</p>
+<h5 id="Query-DSL"><a href="#Query-DSL" class="headerlink" title="Query DSL"></a>Query DSL</h5><p>结构化查询是一种灵活的，多表现形式的查询语言。Elasticsearch在一个简单的JSON接口中用结构化查询来展现Lucene绝大多数的能力。它使得你的查询更加灵活，精准，易于阅读并且易于debug。使用结构化查询，你需要传递query参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">GET /_search</div><div class="line">&#123;</div><div class="line">	&quot;query&quot;: YOUR_QUERY_HERE</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>空查询 -{} - 功能上等同于使用match_all查询子句，正如其名字一样，匹配所有的文档：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">GET /_search</div><div class="line">&#123;</div><div class="line">	&quot;query&quot;:&#123;</div><div class="line">		&quot;match_all&quot;:&#123;&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>更多的例子，如must，should，bool query等等。</p>
+<h5 id="过滤器"><a href="#过滤器" class="headerlink" title="过滤器"></a>过滤器</h5><p>查询条件与文档的相关性用_score这个数值字段来表示，数值越高代表越相关。而有时我们不需要去计算相关性，只需要确定文档满不满足查询条件即可，这时可用filter（过滤器）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">#  uses a bool query to return all accounts with balances between 20000 and 30000</div><div class="line">GET /bank/_search</div><div class="line">&#123;</div><div class="line">  &quot;query&quot;: &#123;</div><div class="line">    &quot;bool&quot;: &#123;</div><div class="line">      &quot;must&quot;: &#123; &quot;match_all&quot;: &#123;&#125; &#125;,</div><div class="line">      &quot;filter&quot;: &#123;</div><div class="line">        &quot;range&quot;: &#123;</div><div class="line">          &quot;balance&quot;: &#123;</div><div class="line">            &quot;gte&quot;: 20000,</div><div class="line">            &quot;lte&quot;: 30000</div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在网上的这个例子中，返回balance在20000~30000的文档，所有满足条件的文档的匹配程度都是”等价”的，没有谁更相关，所以计算分数是毫无意义的。</p>
+<h5 id="聚合"><a href="#聚合" class="headerlink" title="聚合"></a>聚合</h5><p>aggregation（聚合）能够对数据分组和提取统计信息，大致类似SQL中的group by和聚合函数。Elasticsearch能同时分别返回查询结果和聚合结果，从而避免多次查询。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"># 类似SQL中的 SELECT state, COUNT(*) FROM bank GROUP BY state ORDER BY COUNT(*) DESC</div><div class="line"></div><div class="line">GET /bank/_search</div><div class="line">&#123;</div><div class="line">  &quot;size&quot;: 0,</div><div class="line">  &quot;aggs&quot;: &#123;</div><div class="line">    &quot;group_by_state&quot;: &#123;</div><div class="line">      &quot;terms&quot;: &#123;</div><div class="line">        &quot;field&quot;: &quot;state.keyword&quot;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="五、ElasticSearch-5-2-2的配置相关："><a href="#五、ElasticSearch-5-2-2的配置相关：" class="headerlink" title="五、ElasticSearch 5.2.2的配置相关："></a>五、ElasticSearch 5.2.2的配置相关：</h3><h5 id="为什么有-Bootstrap-Checks"><a href="#为什么有-Bootstrap-Checks" class="headerlink" title="为什么有 Bootstrap Checks"></a>为什么有 Bootstrap Checks</h5><p>Bootstrap Checks 是 Elasticsearch 5.0 新加入的，在之前的 2.x 版本是没有的。之前的版本中，错误的配置会被当成 warning 记录到日志中，但这些信息往往被用户忽视。为了保证一些重要的配置得到应有的重视，Elasticsearch 会在启动时进行 Bootstrap Checks .</p>
+<p>Bootstrap Checks 会检查很多 Elasticsearch 和系统的配置。在开发模式下，所有没通过的检查都会报 warnings 并写进日志文件，即使检查没通过，依然可以启动节点运行 Elasticsearch；而在生产模式下，任何没通过的 Bootstrap Checks 都会报异常并阻止 Elasticsearch 启动。</p>
+<h5 id="开发模式-vs-生产模式"><a href="#开发模式-vs-生产模式" class="headerlink" title="开发模式 vs 生产模式"></a>开发模式 vs 生产模式</h5><p>Elasticsearch 的 HTTP 默认绑定到localhost，并且 transport 使用内部通信，适用于日常开发；而组成集群时，由于每个 ES 实例要可达，故 transport 必须绑定到外部接口。</p>
+<p>一般 Elasticsearch 默认你是在开发模式下工作；一旦配置了诸如network.host的网络配置项，Elasticsearch会认为你处于生产环境。这是避免服务器因不良配置造成数据丢失的重要安全措施。</p>
+<p>另外，HTTP 和 transport 可以分别通过 http.host 和 transport.host进行配置，所以配置单点实例可达时，可以用 HTTP 进行测试而无需触发生产模式。</p>
+<h5 id="Bootstrap-Checks"><a href="#Bootstrap-Checks" class="headerlink" title="Bootstrap Checks"></a>Bootstrap Checks</h5><p>有很多检查项，以 Heap size check为例子，由于 Elasticsearch 是使用 Java 写的，程序在 JVM 上运行，而 JVM 的堆大小是可以配置的。如果 JVM 的起始堆大小不等于最大堆大小，那么在堆 resize 的时候很容易造成系统停滞，为了避免这种resize pauses,一开始就应将两者设置成相等。</p>
+<p>类似的检查还有很多，大部分是针对 JVM 配置项的检查，有些检查项只在 Linux 系统上会检查，有些在所有平台都会检查。这里只列举出检查项，不作进一步说明了。</p>
+<ul>
+<li>Heap size check</li>
+<li>File descriptor check</li>
+<li>Memory lock check</li>
+<li>Maximum number of threads check</li>
+<li>Maximum size virtual memory check</li>
+<li>Maximum map count check</li>
+<li>Client JVM check</li>
+<li>Use serial collector check</li>
+<li>OnError and OnOutOfMemoryError checks</li>
+</ul>
+<h5 id="重要的系统配置"><a href="#重要的系统配置" class="headerlink" title="重要的系统配置"></a>重要的系统配置</h5><p>从上节可知，很多Bootstrap Checks涉及到系统配置，我们需要对系统进行一些配置来使 Elasticsearch 可以获取更多的资源。</p>
+<p>一般必须配置以下几条设置：</p>
+<ul>
+<li>Set JVM heap size</li>
+<li>Disable swapping</li>
+<li>Increase sufficient virtual memory</li>
+<li>Ensure sufficient threads</li>
+</ul>
+<p>在哪里配置系统设置取决于你使用的安装包以及你使用的操作系统。JVM配置参数建议通过 jvm.options 配置文件进行配置，当然，也可以通过ES_JAVA_OPTS环境变量来配置。</p>
+<h3 id="六、ElasticSearch-5-2-2的基本操作："><a href="#六、ElasticSearch-5-2-2的基本操作：" class="headerlink" title="六、ElasticSearch 5.2.2的基本操作："></a>六、ElasticSearch 5.2.2的基本操作：</h3><h5 id="基础指令"><a href="#基础指令" class="headerlink" title="基础指令"></a>基础指令</h5><p>下面是在Console 中输入的一些命令，可以依次运行看看结果。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"># Cluster Health</div><div class="line">GET _cat/health?v</div><div class="line"></div><div class="line"># list of nodes</div><div class="line">GET /_cat/nodes?v</div><div class="line"></div><div class="line"># List All Indices</div><div class="line">GET /_cat/indices?v</div><div class="line"></div><div class="line"># Create an Index</div><div class="line">PUT /customer?pretty</div><div class="line">GET /_cat/indices?v</div><div class="line"></div><div class="line"># Index and Query a Document</div><div class="line">PUT /customer/external/1?pretty</div><div class="line">&#123;</div><div class="line">	&quot;name&quot;:&quot;John Doe&quot;</div><div class="line">&#125;</div><div class="line">GET /customer/external/1?pretty</div><div class="line">DELETE /customer/external/1</div><div class="line"></div><div class="line"># Delete an Index </div><div class="line">DELETE /customer?pretty</div></pre></td></tr></table></figure>
+<p>可以看出Elasticsearch的REST API基本格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;REST Verb&gt; /&lt;Index&gt;/&lt;Type&gt;/&lt;ID&gt;</div></pre></td></tr></table></figure>
+<h5 id="索引-替换文档"><a href="#索引-替换文档" class="headerlink" title="索引/替换文档"></a>索引/替换文档</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"># Indexing/Replacing Documents</div><div class="line">PUT /customer/external/1?pretty</div><div class="line">&#123;</div><div class="line">  &quot;name&quot;: &quot;John Doe&quot;</div><div class="line">&#125;</div><div class="line"></div><div class="line"># using the POST verb instead of PUT since we didn’t specify an ID</div><div class="line">POST /customer/external?pretty</div><div class="line">&#123;</div><div class="line">  &quot;name&quot;: &quot;Jane Doe&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>使用PUT方法需要明确指定ID，两次PUT的id相同则是替换之前的文档，第二次id不同则是创建新的文档</li>
+<li>没明确指定ID则使用POST方法</li>
+</ul>
+<h6 id="更新文档"><a href="#更新文档" class="headerlink" title="更新文档"></a>更新文档</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"># Updating Documents</div><div class="line">POST /customer/external/1/_update?pretty</div><div class="line">&#123;</div><div class="line">  &quot;doc&quot;: &#123; &quot;name&quot;: &quot;Jane Doe&quot; &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">POST /customer/external/1/_update?pretty</div><div class="line">&#123;</div><div class="line">  &quot;doc&quot;: &#123; &quot;name&quot;: &quot;Jane Doe&quot;, &quot;age&quot;: 20 &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"># uses a script to increment the age by 5</div><div class="line">POST /customer/external/1/_update?pretty</div><div class="line">&#123;</div><div class="line">  &quot;script&quot; : &quot;ctx._source.age += 5&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>更新文档其实就是先删除再新建一个新的文档</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Whenever we do an update, Elasticsearch deletes the old document and then indexes a new document with the update applied to it in one shot</div></pre></td></tr></table></figure>
+<h5 id="删除文档"><a href="#删除文档" class="headerlink" title="删除文档"></a>删除文档</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># Deleting Documents</div><div class="line">DELETE /customer/external/2?pretty</div></pre></td></tr></table></figure>
+<p>直接删除整个index要比删除index里的所有文档更有效率</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">It is worth noting that it is much more efficient to delete a whole index instead of deleting all documents with the Delete By Query API.</div></pre></td></tr></table></figure>
+<h5 id="批处理"><a href="#批处理" class="headerlink" title="批处理"></a>批处理</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"># Batch Processing </div><div class="line">POST /customer/external/_bulk?pretty</div><div class="line">&#123;&quot;index&quot;:&#123;&quot;_id&quot;:&quot;1&quot;&#125;&#125;</div><div class="line">&#123;&quot;name&quot;: &quot;John Doe&quot; &#125;</div><div class="line">&#123;&quot;index&quot;:&#123;&quot;_id&quot;:&quot;2&quot;&#125;&#125;</div><div class="line">&#123;&quot;name&quot;: &quot;Jane Doe&quot; &#125;</div><div class="line"></div><div class="line"></div><div class="line">POST /customer/external/_bulk?pretty</div><div class="line">&#123;&quot;update&quot;:&#123;&quot;_id&quot;:&quot;1&quot;&#125;&#125;</div><div class="line">&#123;&quot;doc&quot;: &#123; &quot;name&quot;: &quot;John Doe becomes Jane Doe&quot; &#125; &#125;</div><div class="line">&#123;&quot;delete&quot;:&#123;&quot;_id&quot;:&quot;2&quot;&#125;&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>删除操作后面没有相应的文档数据，只提供要删除的 ID 即可；</li>
+<li>批处理对每个操作(action)按顺序依次执行(sequentially and in order)，如果单个操作出错，也会继续执行剩下的操作；</li>
+<li>批处理返回结果时，按照请求顺序为每个操作提供一个状态以便用户检查。</li>
+</ul>
+
       
 
       
@@ -293,7 +439,7 @@
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="搜索之es的学习" data-title="搜索之es的学习(待补充)" data-url="http://yoursite.com/2017/03/16/搜索之es的学习/"></div>
+	<div class="ds-thread" data-thread-key="搜索之es的学习" data-title="搜索——ElasticSearch的学习笔记" data-url="http://yoursite.com/2017/03/16/搜索之es的学习/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
