@@ -52,7 +52,7 @@ Configuration Info for Java,显示虚拟机配置信息
 
 jmap
 Memory Map for Java">
-<meta property="og:updated_time" content="2017-03-19T11:12:27.000Z">
+<meta property="og:updated_time" content="2017-07-13T12:08:08.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Sun的jdk命令行工具">
 <meta name="twitter:description" content="名称
@@ -266,6 +266,14 @@ Memory Map for Java">
 </tr>
 </tbody>
 </table>
+<p>Java的ReentrantLock和synchronized两种锁定机制的对比：</p>
+<p>ReentrantLock类实现了Lock，它拥有与synchronized相同的并发性和内存语义，但是添加了类似锁投票、定时锁等候和可中断锁等候的一些特性。此外，它还提供了在激烈争用情况下更佳的性能。（换句话说，当许多线程都想访问共享资源时，JVM 可以花更少的时候来调度线程，把更多时间用在执行线程上。）</p>
+<p>ReentrantLock默认的构造函数实现的是一个不公平锁，公平锁使线程按照请求锁的顺序依次获得锁；而不公平锁则允许讨价还价，在这种情况下，线程有时可以比先请求锁的其他线程先得到锁。公平锁带来额外的性能成本，需要诸如记账和同步。</p>
+<p>还不要抛弃synchronized</p>
+<ul>
+<li>因为对于java.util.concurrent.lock中的锁定类来说，synchronized 仍然有一些优势。比如，在使用 ReentrantLock 的时候，不能忘记释放锁；在退出synchronized块时，JVM 会为您做这件事。您很容易忘记用finally块释放锁，这对程序非常有害。您的程序能够通过测试，但会在实际工作中出现死锁，那时会很难指出原因;</li>
+<li>当 JVM 用 synchronized 管理锁定请求和释放时，JVM 在生成线程转储时能够包括锁定信息。这些对调试非常有价值，因为它们能标识死锁或者其他异常行为的来源。Lock类只是普通的类，JVM 不知道具体哪个线程拥有Lock对象。而且，几乎每个开发人员都熟悉 synchronized，它可以在 JVM 的所有版本中工作。</li>
+</ul>
 
       
 

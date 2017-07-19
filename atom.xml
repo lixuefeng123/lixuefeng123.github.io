@@ -8,33 +8,445 @@
     <atom:link href="/atom.xml" rel="self" type="application/rss+xml"/>
     
     <description>This is my blog</description>
-    <pubDate>Sat, 15 Apr 2017 11:41:31 GMT</pubDate>
+    <pubDate>Sun, 25 Jun 2017 07:10:42 GMT</pubDate>
     <generator>http://hexo.io/</generator>
     
     <item>
-      <title>学习计划(2017/4/15)</title>
-      <link>http://yoursite.com/2017/04/15/%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92-2017-4-15/</link>
-      <guid>http://yoursite.com/2017/04/15/%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92-2017-4-15/</guid>
-      <pubDate>Sat, 15 Apr 2017 11:15:25 GMT</pubDate>
+      <title>jvm 垃圾回收</title>
+      <link>http://yoursite.com/2017/06/24/jvm-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/</link>
+      <guid>http://yoursite.com/2017/06/24/jvm-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/</guid>
+      <pubDate>Sat, 24 Jun 2017 09:57:59 GMT</pubDate>
       <description>
       
-        &lt;p&gt;最近想来，前些日子浪费了不少时间，因此写下此计划，用来提醒自己接下来的工作重点：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Flink的学习，重点学习flink的相关api和一些常见的开发方法，闲暇时间阅读下微信的flink公众号的内容；&lt;/li&gt;
-&lt;li&gt;es的学习，作为目前流行的外网搜
+        &lt;p&gt;写这篇文章的目的在于一个读书之后的提炼，读完《深入理解java虚拟机》这本书之后深感需要提炼下关键的知识点，这样针对具体的问题记忆会更加深刻。接下来我将以问题对话的形式记录jvm-垃圾回收的相关知识点。&lt;br&gt;先附上原文的一个链接&lt;a href=&quot;http://icyf
       
       </description>
       
-      <content:encoded><![CDATA[<p>最近想来，前些日子浪费了不少时间，因此写下此计划，用来提醒自己接下来的工作重点：</p>
+      <content:encoded><![CDATA[<p>写这篇文章的目的在于一个读书之后的提炼，读完《深入理解java虚拟机》这本书之后深感需要提炼下关键的知识点，这样针对具体的问题记忆会更加深刻。接下来我将以问题对话的形式记录jvm-垃圾回收的相关知识点。<br>先附上原文的一个链接<a href="http://icyfenix.iteye.com/blog/715301" target="_blank" rel="external">link</a></p>
+<p>问：1.地球人都知道，Java有个东西叫垃圾收集器，他让创建的对象不需要像c/cpp那样delete或者free掉，你能不能谈谈,GC是在什么时候，对什么东西，做了什么事情？</p>
+<p>答：首先是什么时候，回答这个问题需要介绍下HotSpot JVM对于堆的划分，它将堆划分为Young区和Old区，Young区分为Eden区和survivor1和survivor2三部分。其中GC又分为minor GC（新生代）和full GC（年老代）,其中minor GC发生的条件是Eden区满了的时候，大多数的Java对象具有朝生夕灭的特性，所以Minor GC非常频繁，一般回收速度也比较快。老年代GC（也叫Full GC），指发生在老年代的GC，当升到老年代的对象大于老年代的剩余空间时触发Full GC,其中GC时间与非GC时间耗时比例超GCTIMERATE的限制会触发OOM。</p>
+<p>对什么东西：对从GC root搜索找不到的对象，而且经过第一次标记、清理之后仍然没有复活的对象进行回收。</p>
+<p>做了什么事情:能说出诸如新生代做的是复制清理、from survivor、to survivor是干啥用的、老年代做的是标记清理、标记清理后碎片需要整理、复制清理和标记清理有有什么优劣势等。</p>
+<p>复制清理：将内存容量划分为大小相等的两块，每次只使用其中一块，然后用完再将存活的对象复制到另一块，将原先的内存块清理掉，实现简单并且运行高效。只是这种算法的代价是将内存缩小为原来的一半，有点高了。v<br>标记清理：复制清理在对象存活率较高时就要进行较多的复制操作，效率将会变低。更关键的是如果不想浪费50%的空间，就需要有额外的空间进行分配担保，以应对被使用的内存中所有的对象都100%存活的极端情况。所以老年代一般不采用这种算法。标记清理的标记过程和“标记-清除”算法一样，但后续的步骤不是直接对可回收对象进行清理，而是让所有存活的对象都向一端移动，然后直接清理掉端边界以外的内存。</p>
+<p>问：2.Java和C++在内存分配和管理上有什么区别？</p>
+<p>答：Java与C++之间有一堵由动态内存分配和垃圾收集技术所围成的高墙，墙外面的人想进去，墙里面的人想出来。  对于从事C和C++程序开发的开发人员来说，在内存管理领域，他们既是拥有最高权利的皇帝，也是从事最基础工作的劳动人民—–既拥有每一个对象的所有权，又担负着每一个对象从生命开始到终结的维护责任。 对于Java程序员来说，虚拟机的自动内存分配机制的帮助下，不再需要为每一个new操作去写配对的delete/free代码，而且不容易出现内存泄露和内存溢出问题，看起来由虚拟机管理内存一切都很美好。不过，也正是因为Java程序员把内存控制的权利交给Java虚拟机，一旦出现内存泄露和溢出方面的问题，如果不了解虚拟机是怎样使用内存的，那排查错误将会是一项异常艰难的工作。并且好的Java程序在编写的时候肯定要考虑GC的问题，怎样定义static对象，怎样new对象效率更高等等问题，简称面向GC的编程也可以说Java的内存分配管理是一种托管的方式，托管于JVM。C++经过编译时直接编译成机器码，而Java是编译成字节码，由JVM解释执行。C++是编译型语言，而Java兼具编译型和解释型语言的特点。</p>
+<p>问：3.java虚拟机规范将JVM虚拟机所管理的内存分为几部分？</p>
+<p>答：</p>
 <ul>
-<li>Flink的学习，重点学习flink的相关api和一些常见的开发方法，闲暇时间阅读下微信的flink公众号的内容；</li>
-<li>es的学习，作为目前流行的外网搜索引擎，一个搜索人应该要掌握的基本知识；</li>
-<li>ha3的学习，快速搭建一个搜索引擎；</li>
-<li>highcharts和anjularJs的学习，最近开发前端的页面需要补充这部分的知识。</li>
+<li>程序计数器：是一块较小的内存空间，它的作用可以看做是当前线程所执行字节码的行号指示器，属于线程私有，和线程的生命周期相同。</li>
+<li>Java虚拟机栈：线程私有，生命周期和线程相同。Java虚拟机栈描述的是Java方法（区别于native的本地方法）执行的内存模型，每个方法被执行的时候会同时创建一个栈帧用于存储局部变量表、操作栈、动作链接、方法出口等信息。每个方法被调用直到执行完成的过程，都对应着一个栈帧在虚拟机栈中入栈和出栈的过程。</li>
+<li>本地方法栈：与虚拟机栈所发挥的作用是非常相似的，其区别不过是虚拟机栈为虚拟机执行Java方法(也就是字节码)服务，而本地方法栈则为虚拟机所使用到的Native方法服务。</li>
+<li>方法区：用于存储已被虚拟机加载的类信息、常量、静态变量等，被所有的线程所共享。</li>
+<li>java堆：被所有的线程所共享，所有的对象实例以及数组都要在堆上分配，class对象也在这里。</li>
+</ul>
+<p>问：4.有哪些方法可以判断一个对象已经可以被回收，JVM怎么判断一个对象已经消亡可以被回收？</p>
+<p>答：</p>
+<p>1.引用计数算法：给对象中添加一个引用计数器，每当有一个地方引用它时，计数器就加1；当引用失效时，计数器值就减1；任何时刻计数器都为0的对象就是不可能再被使用的。         Java语言没有选用引用计数法来管理内存，因为引用计数法不能很好的解决循环引用的问题。<br>2.根搜索算法：在主流的商用语言中，都是使用根搜索算法来判定对象是否存活的。GC Root Tracing 算法思路就是通过一系列的名为”GC  Roots”的对象作为起始点，从这些节点开始向下搜索，搜索所走过的路径称为引用链（Reference Chain），当一个对象到GC Roots没有任何引用链相连，即从GC Roots到这个对象不可达，则证明此对象是不可用的。</p>
+<p>问：5.那些对象可以作为GC Roots？</p>
+<p>答：</p>
+<ul>
+<li>虚拟机栈（栈帧中的本地变量表）中的引用的对象</li>
+<li>方法区中的类静态属性引用的对象</li>
+<li>方法区中的常量引用的对象</li>
+<li>本地方法栈中JNI（Native方法）的引用对象</li>
+</ul>
+<p>问：6.java代码编译的结果？</p>
+<p>答：是字节码文件.class</p>
+<p>问：7.Java中的static变量和static方法在vJVM运行中的内存分配有什么不同？</p>
+<p>答：<br>比较条目 | 静态对象 | 非静态对象<br>—-|——|—-<br>拥有属性： | 是类共同拥有的  | 是类各对象独立拥有的<br>内存分配： | 内存空间上是固定的  | 空间在各个附属类里面分配<br>分配顺序： | 先分配静态对象的空间  | 继而再对非静态对象分配空间，初始化顺序是先静态</p>
+<p>问：8.在heap中没有类实例的时候，类信息还存在于JVM吗？ 存在于什么地方？</p>
+<p>答：存在，应该是在方法区，包括类信息和常量等，对象的引用在java虚拟机栈中。</p>
+]]></content:encoded>
+      
+      <comments>http://yoursite.com/2017/06/24/jvm-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>jvm 类加载</title>
+      <link>http://yoursite.com/2017/06/24/jvm-%E7%B1%BB%E5%8A%A0%E8%BD%BD/</link>
+      <guid>http://yoursite.com/2017/06/24/jvm-%E7%B1%BB%E5%8A%A0%E8%BD%BD/</guid>
+      <pubDate>Sat, 24 Jun 2017 09:57:45 GMT</pubDate>
+      <description>
+      
+        &lt;p&gt;上篇文章讲述了jvm垃圾回收的一些知识点，这篇文章提炼下jvm类加载机制相关的一些知识点。先附上参考&lt;a href=&quot;http://www.jianshu.com/p/ace2aa692f96&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;link&lt;/a&gt;
+      
+      </description>
+      
+      <content:encoded><![CDATA[<p>上篇文章讲述了jvm垃圾回收的一些知识点，这篇文章提炼下jvm类加载机制相关的一些知识点。先附上参考<a href="http://www.jianshu.com/p/ace2aa692f96" target="_blank" rel="external">link</a></p>
+<p>类的加载过程分析：.java文件——&gt;通过jdk环境相关指令编译（javac）——&gt;.class文件——v&gt;JVM初始化之后，如果有类的执行、调用等相关操作，JVM就会将.class文件加载到内存中，并开始下面的一系列处理：（链接-&gt;初始化）。</p>
+<p>一、关于classLoader：</p>
+<p>首先我们要搞清楚一点，ClassLoader是Java用于加载类的一个机制。等到程序运行时，JVM先初始化，在JVM初始化的过程中，JVM生成几个ClassLoader，JVM调用指定的ClassLoader去加载.class文件等各类路径、文件的类。</p>
+<p>程序运行时类的加载实际过程：</p>
+<ul>
+<li>JDK执行指令去寻找jre目录，寻找jvm.dll，并初始化JVM；</li>
+<li>产生一个Bootstrap Loader（启动类加载器）；</li>
+<li>BootstrapLoader自动加载ExtendedLoader（标准扩展类加载器），并将其父Loader设为Bootstrap Loader；</li>
+<li>BootstrapLoader自动加载AppClassLoader（系统类加载器），并将其父Loader设为Extended Loader；</li>
+<li>最后由AppClassLoader加载HelloWorld类。</li>
+</ul>
+<p>各类classLoader的关系图解：</p>
+<p><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/e529cf236d3d5981ecd0b06e3eb7defe.png" alt="image.png"></p>
+<p>二、整个类的加载流程：</p>
+<p>编译 -&gt; 加载 -&gt; 链接（验证+准备+解析）-&gt;初始化（使用前的准备）-&gt;使用-&gt; 卸载</p>
+<p>三、类加载过程的原理分析：</p>
+<p><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/fd5f46d617e87512b881731dabb1b0de.png" alt="image.png"></p>
+<p>四、虚拟机规范严格规定了如下5中种情况必须立即对类进行“初始化”：</p>
+<p>1.遇到new、getstatic、putstatic或者invokestatic这四条字节码指令时，如果类没有进行初始化，需要先触发其初始化；<br>2.使用java.lang.reflect包的方法对类进行反射调用的时候，如果类没有进行过初始化，需要先触发其初始化；<br>3.当初始化一个类的时候，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化；<br>4.当虚拟机启动的时候，用户需要指定一个要执行的主类（包含main()方法的那个类），虚拟机会先初始化这个主类。<br>5.当使用JDK 1.7的动态语言支持时，如果一个java.lang.invoke.MethodHandle实例最后的解析结果为REF_getStatic、REF_putStatic、REF_invokeStatic的方法句柄，并且这个方法句柄对应的类没有进行过初始化，则需要先触发其初始化。</p>
+]]></content:encoded>
+      
+      <comments>http://yoursite.com/2017/06/24/jvm-%E7%B1%BB%E5%8A%A0%E8%BD%BD/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>【重构 改善既有代码的设计】读书笔记</title>
+      <link>http://yoursite.com/2017/06/24/%E3%80%90%E9%87%8D%E6%9E%84-%E6%94%B9%E5%96%84%E6%97%A2%E6%9C%89%E4%BB%A3%E7%A0%81%E7%9A%84%E8%AE%BE%E8%AE%A1%E3%80%91%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</link>
+      <guid>http://yoursite.com/2017/06/24/%E3%80%90%E9%87%8D%E6%9E%84-%E6%94%B9%E5%96%84%E6%97%A2%E6%9C%89%E4%BB%A3%E7%A0%81%E7%9A%84%E8%AE%BE%E8%AE%A1%E3%80%91%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</guid>
+      <pubDate>Sat, 24 Jun 2017 02:59:59 GMT</pubDate>
+      <description>
+      
+        &lt;h3 id=&quot;重构：在代码写好之后改进它的设计。&quot;&gt;&lt;a href=&quot;#重构：在代码写好之后改进它的设计。&quot; class=&quot;headerlink&quot; title=&quot;重构：在代码写好之后改进它的设计。&quot;&gt;&lt;/a&gt;重构：在代码写好之后改进它的设计。&lt;/h3&gt;&lt;p&gt;任何一个傻瓜都能写出
+      
+      </description>
+      
+      <content:encoded><![CDATA[<h3 id="重构：在代码写好之后改进它的设计。"><a href="#重构：在代码写好之后改进它的设计。" class="headerlink" title="重构：在代码写好之后改进它的设计。"></a>重构：在代码写好之后改进它的设计。</h3><p>任何一个傻瓜都能写出计算机可以理解的代码。唯有写出人类容易理解的代码，才是优秀的程序员。</p>
+<p>重构（名词）：对软件内部结构的一种调整，目的是在不改变软件可观察行为的前提下，提高其可理解性，降低其修改成本。</p>
+<p>重构（动词）：使用一系列重构手法，在不改变软件可观察行为的前提下，调整其结构。</p>
+<h3 id="因为重点阅读了7-9章，这里将7-9张章的读书笔记总结如下："><a href="#因为重点阅读了7-9章，这里将7-9张章的读书笔记总结如下：" class="headerlink" title="因为重点阅读了7-9章，这里将7-9张章的读书笔记总结如下："></a>因为重点阅读了7-9章，这里将7-9张章的读书笔记总结如下：</h3><h4 id="在对象之间搬移特性"><a href="#在对象之间搬移特性" class="headerlink" title="在对象之间搬移特性"></a>在对象之间搬移特性</h4><p>在对象的设计过程中，『决定把责任放在哪儿』即使不是最重要的事，也是最重要的事之一。</p>
+<h4 id="搬移函数-Move-Method"><a href="#搬移函数-Move-Method" class="headerlink" title="搬移函数 Move Method"></a>搬移函数 Move Method</h4><p>你的程序中，有个函数与其所在类之外的另一个类进行更多交流：调用后者，或被后者调用 -&gt; 在该函数最常引用的类中建立一个有类似行为的新函数。将旧函数变成一个单纯的委托函数，或是将旧函数完全移除</p>
+<ul>
+<li>检查源类中被源函数所使用的一切特性（包括字段和函数），考虑它们是否也该被搬迁（如果某个特性只被你打算搬移的那个函数用到，就应该将它一并搬迁。如果另有其他函数使用了这个特性，你可以考虑将使用该特性的所有函数全都一并搬迁。有时候，搬移一组函数比逐一搬移简单些）</li>
+<li>检查源类的子类和超类，看看是否有该函数的其他声明（如果出现其他声明，你或许无法进行搬移，除非目标类也同样表现出多态性）</li>
+<li>在目标类中声明这个函数（你可以选择一个更有意义的名称）</li>
+<li>将源函数的代码复制到目标函数中。调整后者，使其能在新类中正常运行（如果源函数包含异常处理，你得判断逻辑上应该由哪个类来处理这一异常。如果应该由源类来负责，就把异常处理留在原地）</li>
+<li>编译目标类</li>
+<li>决定如何从源函数正确引用目标对象</li>
+<li>修改源函数，使之成为一个纯委托函数</li>
+<li>编译，测试</li>
+<li>决定是否删除源函数，或将它当作一个委托函数保留下来（如果你经常要在源对象中引用目标函数，那么将源函数作为委托函数保留下来会比较简单）</li>
+<li>如果要移除源函数，请将源类中对源函数的所有调用，替换为对目标函数的调用</li>
+<li>编译，测试</li>
+</ul>
+<h4 id="搬移字段-Move-Field"><a href="#搬移字段-Move-Field" class="headerlink" title="搬移字段 Move Field"></a>搬移字段 Move Field</h4><p>你的程序中，某个字段被其所在类之外的另一个类更多的用到 -&gt; 在目标类新建一个字段，修改源字段的所有用户，令它们改用新字段</p>
+<ul>
+<li>如果字段的访问级是 public，使用 Encapsulate Field 将它封装起来（如果你有可能移动那些频繁访问该字段的函数，或如果有许多函数访问某个字段，先使用 Self Encapsulate Field 也许会有帮助）</li>
+<li>编译，测试</li>
+<li>在目标类中建立与源字段相v同的字段，并同时建立相应的设值/取值函数</li>
+<li>编译目标类</li>
+<li>决定如何在源对象中引用目标对象（首先看是否有一个现成的字段或函数可以帮助你得到目标对象，如果没有，就看能否轻易建立这样一个函数。如果还不行，就得在源类中新建一个字段来存放目标对象。这可能是个永久性修改，但你也可以让它是暂时的，因为后续重构可能会把这个新建字段除掉）</li>
+<li>删除源字段</li>
+<li>将所有对源字段的引用替换为对某个目标函数的调用</li>
+<li>编译，测试</li>
+</ul>
+<h4 id="提炼类-Extract-Class"><a href="#提炼类-Extract-Class" class="headerlink" title="提炼类 Extract Class"></a>提炼类 Extract Class</h4><p>某个类做了应该由两个类做的事 -&gt; 建立一个新类，将相关的字段和函数从旧类搬移到新类</p>
+<ul>
+<li>决定如何分解类所负的责任</li>
+<li>建立一个新类，用以表现从旧类中分离出来的责任（如果旧类剩下的责任与旧类名称不符，为旧类更名）</li>
+<li>建立『从旧类访问新类』的连接关系（有可能需要一个双向链接。但是在真正需要它之前，不要建立『从新类通往旧类』的链接）</li>
+<li>对于你想搬移的每一个字段，运用 Move Field 搬移之</li>
+<li>每次搬移后，编译、测试</li>
+<li>使用 Move Method 将必要函数搬移到新类，先搬移低层函数（也就是『被其他函数调用』多于『调用其他函数』的函数），再搬移较高层函数</li>
+<li>每次搬移之后，编译、测试</li>
+<li>检查，精简每个类的接口（如果你建立其双向链接，检查是否可以将它改为单向连接）</li>
+<li>决定是否公开新类。如果你的确需要公开它，就要决定让它成为引用对象还是不可变的值对象</li>
+</ul>
+<p>这里也存在危险性。如果需要确保两个对象同时被锁定，你就面临事务问题，需要使用其他类型的共享锁。</p>
+<h4 id="将类内联化-Inline-Class"><a href="#将类内联化-Inline-Class" class="headerlink" title="将类内联化 Inline Class"></a>将类内联化 Inline Class</h4><p>某个类没有做太多事情 -&gt; 将这个类的所有特性搬移到另一个类中，然后移除原类</p>
+<ul>
+<li>在目标类身上声明源类的 public 协议，并将其中所有函数委托至源类（如果『以一个独立接口表示源类函数』更合适的话，就应该在内联之前先使用 Extract Interface）</li>
+<li>修改所有源类引用点，改而引用目标类（将源类声明为 private，以斩断包之外的所有引用可能。同时修改源类的名称，这便可使编译器帮助你捕捉到所有对于源类的隐藏引用点）</li>
+<li>编译，测试</li>
+<li>运用 Move Method 和 Move Field，将源类的特性全部搬移到目标类</li>
+<li>为源类举行一个简单的『丧礼』。</li>
+</ul>
+<h4 id="隐藏委托关系-Hide-Delegate"><a href="#隐藏委托关系-Hide-Delegate" class="headerlink" title="隐藏委托关系 Hide Delegate"></a>隐藏委托关系 Hide Delegate</h4><p>客户通过一个委托类来调用另一个对象 -&gt; 在服务类上建立客户所需的所有函数，用以隐藏委托关系</p>
+<ul>
+<li>对于每一个委托关系中的函数，在服务对象端建立一个简单的委托函数</li>
+<li>调整客户，令它只调用服务对象提供的函数（如果使用者和服务提供者不在同一个包）</li>
+<li>每次调整后，编译并测试</li>
+<li>如果将来不再有任何客户需要用到 Delegate，便课移除服务对象中的相关访问函数</li>
+<li>编译，测试</li>
+</ul>
+<h4 id="移除中间人-Remove-Middle-Man"><a href="#移除中间人-Remove-Middle-Man" class="headerlink" title="移除中间人 Remove Middle Man"></a>移除中间人 Remove Middle Man</h4><p>某个类做了过多的简单委托动作 -&gt; 让客户直接调用受托类</p>
+<ul>
+<li>建立一个函数，用以获得受托对象</li>
+<li>对于每个委托函数，在服务类中删除该函数，并让需要调用该函数的客户转为调用受托对象</li>
+<li>处理每个委托函数后，编译、测试</li>
+</ul>
+<h4 id="引入外加函数-Introduce-Foreign-Method"><a href="#引入外加函数-Introduce-Foreign-Method" class="headerlink" title="引入外加函数 Introduce Foreign Method"></a>引入外加函数 Introduce Foreign Method</h4><p>你需要为提供服务的类增加一个函数，但你无法修改这个类 -&gt; 在客户类中建立一个函数，并以第一参数形式传入一个服务类实例，外加函数终究是权宜之计。如果有可能，你仍然应该将这些函数搬移到它们的理想家园。如果由于代码所有权的原因使你无法这么做，就把外加函数交给服务类的拥有者，请他帮你在服务类中实现这个函数。</p>
+<ul>
+<li>在客户类中建立一个函数，用来提供你需要的功能（这个函数不应该调用客户类的任何特性。如果它需要一个值，把该值当做参数传给它）</li>
+<li>以服务类实例作为该函数的第一个参数</li>
+<li>将该函数注释为『外加函数(foreign method)，应该在服务类实现』（这么一来，如果将来有机会将外加函数搬移到服务类中时，你便可以轻松找出这些外加函数）</li>
+</ul>
+<h4 id="引入本地扩展-Introduce-Local-Extension"><a href="#引入本地扩展-Introduce-Local-Extension" class="headerlink" title="引入本地扩展 Introduce Local Extension"></a>引入本地扩展 Introduce Local Extension</h4><p>你需要为服务类提供一些额外函数，但你无法修改这个类 -&gt; 建立一个新类，使它包含这些额外函数。让这个扩展品陈伟源类的子类或包装类</p>
+<ul>
+<li>建立一个扩展类，将它作为原始类的子类或包装类</li>
+<li>在扩展类中加入转型构造函数（所谓『转型构造函数』是指『接受原对象作为参数』的构造函数。如果采用子类化方案，那么转型构造函数应该调用适当的超类构造函数；如果采用包装类方案，那么转型构造函数应该将它得到的传入参数以实例变量的形式保存起来，用作接受委托的原对象）</li>
+<li>在扩展类中加入新特性</li>
+<li>根据需要，将原对象替换为扩展对象</li>
+<li>将针对原始类定义的所有外加函数搬移到扩展类中</li>
+</ul>
+<h3 id="重新组织数据"><a href="#重新组织数据" class="headerlink" title="重新组织数据"></a>重新组织数据</h3><h4 id="自封装字段-Self-Encapsulate-Field"><a href="#自封装字段-Self-Encapsulate-Field" class="headerlink" title="自封装字段 Self Encapsulate Field"></a>自封装字段 Self Encapsulate Field</h4><p>你直接访问一个字段，但与字段之间的耦合关系逐渐变得笨拙 -&gt; 为这个字段建立取值/设值函数，并且只以这些函数来访问字段</p>
+<ul>
+<li>为待封装字段建立取值/设值函数</li>
+<li>找出该字段的所有引用点，将它们全部改为调用取值/设值函数</li>
+<li>将该字段声明为 private</li>
+<li>复查，确保找出所有引用点</li>
+<li>编译，测试</li>
+</ul>
+<h4 id="以对象取代数据值-Replace-Data-Value-with-Object"><a href="#以对象取代数据值-Replace-Data-Value-with-Object" class="headerlink" title="以对象取代数据值 Replace Data Value with Object"></a>以对象取代数据值 Replace Data Value with Object</h4><p>你有一个数据项 -&gt; 需要与其他数据和行为一起使用才有意义 -&gt; 将数据项变成对象</p>
+<ul>
+<li>为待替换数值新建一个类，在其中声明一个 final 字段，其类型和源类中的待替换数值类型一样。然后在新类中加入这个字段的取值函数，再加上一个接受此字段为参数的构造函数</li>
+<li>编译</li>
+<li>将源类中的待替换数值字段的类型改为前面新建的类</li>
+<li>修改源类中该字段的取值函数，令它调用新类的取值函数</li>
+<li>如果源类构造函数中用到这个待替换字段（多半是赋值动作），我们就修改构造函数，令它改用新类的构造函数来对字段进行赋值动作</li>
+<li>修改源类中待替换字段的设值函数，令它为新类创建一个实例</li>
+<li>编译，测试</li>
+<li>现在，你有可能需要对新类使用 Change Value to Reference</li>
+</ul>
+<h4 id="将值对象改为引用对象-Change-Value-to-Reference"><a href="#将值对象改为引用对象-Change-Value-to-Reference" class="headerlink" title="将值对象改为引用对象 Change Value to Reference"></a>将值对象改为引用对象 Change Value to Reference</h4><p>你从一个类衍生出许多彼此相等的实例，希望将它们替换为同一个对象 -&gt; 将这个值对象编程引用对象</p>
+<ul>
+<li>使用 Replace Constructor with Factory Method</li>
+<li>编译，测试</li>
+<li>决定由什么对象负责提供访问新对象的途径（可能是一个静态字典或一个注册表对象；也可以使用多个对象作为新对象的访问点）</li>
+<li>决定这些引用对象应该预先创建号，或是应该动态创建（如果这些引用对象是预先创建号的，而你必须从内存中将它们读取出来，那么就得去报它们在被需要的时候能够被及时加载）</li>
+<li>修改工厂函数，令它返回引用对象（如果对象是预先创建号的，你就需要考虑：万一有人请求一个并不存在的对象，要如何处理错误；可能希望对工厂函数使用 Rename Method，使其传达这样的信息：它返回的是一个已存在的对象）</li>
+<li>编译，测试</li>
+</ul>
+<h4 id="将引用对象改为值对象-Change-Reference-to-Value"><a href="#将引用对象改为值对象-Change-Reference-to-Value" class="headerlink" title="将引用对象改为值对象 Change Reference to Value"></a>将引用对象改为值对象 Change Reference to Value</h4><p>你有一个引用对象，很小且不可变，而且不易管理 -&gt; 将它变成一个值对象</p>
+<ul>
+<li>检查重构目标是否为不可变对象，或是否可修改为不可变对象（如果该对象目前还不是不可变的，就使用 Removing Setting Method，直到它成为不可变的为止；如果无法将该对象修改为不可变的，就放弃使用本项重构）</li>
+<li>建立 equals() 和 hashCode()</li>
+<li>编译，测试</li>
+<li>考虑是否可以删除工厂函数，并将构造函数声明为 public</li>
+</ul>
+<h4 id="以对象取代数组-Replace-Array-with-Object"><a href="#以对象取代数组-Replace-Array-with-Object" class="headerlink" title="以对象取代数组 Replace Array with Object"></a>以对象取代数组 Replace Array with Object</h4><p>你有一个数组，其中的元素各自代表不同的东西 -&gt; 以对象替换数组。对于数组中的每个元素，以一个字段来表示</p>
+<ul>
+<li>新建一个类表示数组所拥有的信息，并在其中以一个 public 字段保存原先的数组</li>
+<li>修改数组的所有用户，让它们改用新类的实例</li>
+<li>编译，测试</li>
+<li>逐一为数组元素添加取值/设值函数。根据元素的用途，为这些访问函数命名。修改客户代码，让它们动过访问函数取用数组内的元素。每次修改后，编译并测试</li>
+<li>当所有对数组的直接访问都转而调用访问函数后，将新类中保存该数组的字段声明为 private</li>
+<li>编译</li>
+<li>对于数组内的每一个元素，在新类中创建一个类型相当的字段。修改该元素的访问函数，令它改用上述的新建字段</li>
+<li>每修改一个元素，编译并测试</li>
+<li>数组的所有元素都有了相应字段之后，删除该数组</li>
+</ul>
+<h4 id="复制『被监视的数据』-Duplicate-Observed-Data"><a href="#复制『被监视的数据』-Duplicate-Observed-Data" class="headerlink" title="复制『被监视的数据』 Duplicate Observed Data"></a>复制『被监视的数据』 Duplicate Observed Data</h4><p>你有一些领域数据置身于 GUI 控件中，而领域函数需要访问这些数据 -&gt; 将该数据复制到一个领域对象中。建立一个 Observer 模式，用以同步领域对象和 GUI 对象内的重复数据</p>
+<ul>
+<li>修改展现类，使其成为领域类的 Observer[GOF]（如果尚未有领域类，就建立一个；如果没有『从展现类到领域类』的关联，就将领域类保存与展现类的一个字段中）</li>
+<li>针对 GUI 类中的领域数据，使用 Self Encapsulate Field</li>
+<li>编译，测试</li>
+<li>在事件处理函数中调用设值函数，直接更新 GUI 组件</li>
+<li>编译，测试</li>
+<li>在领域类中定义数据及其相关访问函数（确保领域类中的设值函数能够触发 Observer 模式的通报机制；对于被观察的数据，在领域类中使用与展现类所用的相同类型来保存。后续重构中你可以自由改变这个数据类型）</li>
+<li>修改展现类中的访问函数，将它们的操作对象改为领域对象（而非 GUI 组件）</li>
+<li>修改 Observer 的 update()，使其从相应的领域对象中将所需数据复制给 GUI 组件</li>
+<li>编译，测试</li>
+</ul>
+<h4 id="将单向关联改为双向关联-Change-Unidirectional-Association-to-Bidirectional"><a href="#将单向关联改为双向关联-Change-Unidirectional-Association-to-Bidirectional" class="headerlink" title="将单向关联改为双向关联 Change Unidirectional Association to Bidirectional"></a>将单向关联改为双向关联 Change Unidirectional Association to Bidirectional</h4><p>两个类都需要使用对方特性，但期间只有一条单向连接 -&gt; 添加一个反向指针，并使修改函数能够同时更新两条连接</p>
+<ul>
+<li>在被引用类中增加一个字段，用以保存反向指针</li>
+<li>决定由哪个类——引用端还是被引用端——控制关联关系</li>
+<li>在被控端建立一个辅助函数，其命名应该清楚指出它的有限用途</li>
+<li>如果既有的修改函数在控制端，让它负责更新方向指针</li>
+<li>如果既有的修改函数在被控端，就在控制端建立一个控制函数，并让既有的修改函数调用这个新建的控制函数</li>
+</ul>
+<h4 id="将双向关联改为单向关联-Change-Bidirectional-Association-to-Unidirectional"><a href="#将双向关联改为单向关联-Change-Bidirectional-Association-to-Unidirectional" class="headerlink" title="将双向关联改为单向关联 Change Bidirectional Association to Unidirectional"></a>将双向关联改为单向关联 Change Bidirectional Association to Unidirectional</h4><p>两个类之间有双向关联，但其中一个类如今不再需要另一个类的特性 -&gt; 去除不必要的关联</p>
+<p>双向关联很有用，但是也必须为它付出代价，那就是维护双向连接、确保对象被正确创建和删除增加的复杂度。而且，由于很多程序员并不习惯使用双向关联，它往往成为错误之源。大量的双向连接也很容易造成『僵尸对象』：某个对象本来已经该死亡了，却仍然保留在系统中，因为对它的引用还没有完全清除。</p>
+<ul>
+<li>找出保存『你想去除的指针』的字段，检查它的每一个用户，判断是否可以去除该指针（不但要检查直接访问点，也要检查调用这些直接访问点的函数）</li>
+<li>如果客户使用了取值函数，先运用 Self Encapsulate Field 将待删除字段自我封装起来，然后使用 Substitute Algorithm 对付取值函数，令它不再使用该字段。然后编译、测试</li>
+<li>如果客户并未使用取值函数，那就直接修改待删除字段的所有被引用点：改以其他途径获得该字段所保存的对象。每次修改后，编译并测试</li>
+<li>如果已经没有任何函数使用待删除字段，移除所有对该字段的更新逻辑，然后移除该字段</li>
+<li>编译，测试</li>
+</ul>
+<h4 id="以字面常量取代魔法数-Replace-Magic-Number-with-Symbolic-Constant"><a href="#以字面常量取代魔法数-Replace-Magic-Number-with-Symbolic-Constant" class="headerlink" title="以字面常量取代魔法数 Replace Magic Number with Symbolic Constant"></a>以字面常量取代魔法数 Replace Magic Number with Symbolic Constant</h4><p>你有一个字面数值，带有特别含义 -&gt; 创造一个常量，根据其意义为它命名，并将上述的字面数值替换为这个常量</p>
+<ul>
+<li>声明一个常量，令其值为原本的魔法数值</li>
+<li>找出这个魔法数的所有引用点</li>
+<li>检查是否可以使用这个新声明的常量来替换该魔法数。如果可以，便以此常量替换之</li>
+<li>编译</li>
+<li>所有魔法数都被替换完毕后，编译并测试。此时整个程序应该运转如常</li>
+</ul>
+<h4 id="封装字段-Encapsulate-Field"><a href="#封装字段-Encapsulate-Field" class="headerlink" title="封装字段 Encapsulate Field"></a>封装字段 Encapsulate Field</h4><ul>
+<li>你的类中存在一个 public 字段 -&gt; 将它声明为 private，并提供相应的访问函数，为 Public 字段提供取值/设值函数</li>
+<li>找到这个类以外使用该字段的所有地点。用取值/设置函数进行替代</li>
+<li>每次修改之后，编译并测试</li>
+<li>将字段的所有用户修改完毕后，把字段声明为 private</li>
+<li>编译，测试</li>
+</ul>
+<h4 id="封装集合-Encapsulate-Collection"><a href="#封装集合-Encapsulate-Collection" class="headerlink" title="封装集合 Encapsulate Collection"></a>封装集合 Encapsulate Collection</h4><p>有个函数返回一个集合 -&gt; 让这个函数返回该集合的一个只读副本，并在这个类中提供添加/移除集合元素的函数（类似 MVC 的 M）</p>
+<ul>
+<li>加入为集合添加/移除元素的函数</li>
+<li>将保存集合的字段初始化为一个空集合</li>
+<li>编译</li>
+<li>找出集合设值函数的所有调用者。你可以修改那个设值函数，让它使用上述新建立的『添加/移除元素』函数；也可以直接修改调用端，改让它们调用上述新建立的『添加/移除元素』函数</li>
+<li>编译，测试</li>
+<li>找出所有『通过取值函数获得集合并修改其内容』的函数。逐一修改这些函数，让它们改用添加/移除函数。每次修改后，编译并测试</li>
+<li>修改完上述所有『通过取值函数获得集合并修改集合内容』的函数后，修改取值函数自身，使它返回该集合的一个只读副本</li>
+<li>编译，测试</li>
+<li>找出取值函数的所有用户，从中找出应该存在于集合所属对象内的代码。运用 Extract Method 和 Move Method 将这些代码移到宿主对象去</li>
+<li>修改现有取值函数的名字，然后添加一个新取值函数，使其返回一个枚举。找出旧取值函数的所有被实用点，将它们都改为使用新取值函数</li>
+<li>如果这一步跨度太大，可以先使用 Rename Method 修改原取值函数的名称；再建立一个新取值函数用以返回枚举；最后再修改所有调用者，使其调用新取值函数</li>
+<li>编译，测试</li>
+</ul>
+<h4 id="以数据类取代记录-Replace-Record-with-Data-Class"><a href="#以数据类取代记录-Replace-Record-with-Data-Class" class="headerlink" title="以数据类取代记录 Replace Record with Data Class"></a>以数据类取代记录 Replace Record with Data Class</h4><p>你需要面对传统编程环境中的记录结构 -&gt; 为该记录创建一个『哑』数据对象</p>
+<ul>
+<li>新建一个类，表示这个记录</li>
+<li>对于记录中的每一项数据，在新建的类中建立对应的一个 private 字段，并提供相应的取值/设值函数</li>
+</ul>
+<h4 id="以类取代类型码-Replace-Type-Code-with-Class"><a href="#以类取代类型码-Replace-Type-Code-with-Class" class="headerlink" title="以类取代类型码 Replace Type Code with Class"></a>以类取代类型码 Replace Type Code with Class</h4><ul>
+<li>为类型码建立一个类</li>
+<li>修改源类的实现，让它使用上述新建的类</li>
+<li>编译，测试</li>
+<li>对于源类中每一个使用类型码的函数，相应建立一个函数，让新函数使用新建的类</li>
+<li>逐一修改源类用户，让它们使用新接口</li>
+<li>每修改一个用户，编译并测试</li>
+<li>删除使用类型码的旧接口，并删除保存旧类型码的静态变量</li>
+<li>编译，测试</li>
+</ul>
+<h4 id="以子类取代类型码-Replace-Type-Code-with-Subclasses"><a href="#以子类取代类型码-Replace-Type-Code-with-Subclasses" class="headerlink" title="以子类取代类型码 Replace Type Code with Subclasses"></a>以子类取代类型码 Replace Type Code with Subclasses</h4><p>你有一个不可变的类型码，它会影响类的行为 -&gt; 以子类取代这个类型码</p>
+<ul>
+<li>使用 Self Encapsulate Field 将类型码自我封装起来（如果类型码被传递给构造函数，就需要将构造函数换成工厂函数）</li>
+<li>为类型码的每一个数值建立一个相应的子类。在每个子类中覆写类型码的取值函数，使其返回相应的类型码值</li>
+<li>每建立一个新的子类，编译并测试</li>
+<li>从超类中删掉保存类型码的字段。将类型码访问函数声明为抽象函数</li>
+<li>编译，测试</li>
+</ul>
+<h4 id="以-State-Strategy-取代类型码-Replace-Type-Code-with-State-Strategy"><a href="#以-State-Strategy-取代类型码-Replace-Type-Code-with-State-Strategy" class="headerlink" title="以 State/Strategy 取代类型码 Replace Type Code with State/Strategy"></a>以 State/Strategy 取代类型码 Replace Type Code with State/Strategy</h4><p>你有一个类型码，它会影响类的行为，但你无法通过继承手法消除它</p>
+<ul>
+<li>使用 Self Encapsulate Field 将类型码自我封装起来</li>
+<li>新建一个类，根据类型码的用途为它命名。这就是一个状态对象</li>
+<li>为这个新类添加子类，每个子类对应一种类型码</li>
+<li>在超类中建立一个抽象的查询函数，用以返回类型码。在每个子类中覆写该函数，返回确切的类型码</li>
+<li>编译</li>
+<li>在源类中建立一个字段，用以保存新建的状态对象</li>
+<li>调整源类中负责查询类型码的函数，将查询动作转发给状态对象</li>
+<li>调整源类中为类型码设值的函数，将一个恰当的状态对象子类赋值给『保存状态对象』的那个字段</li>
+<li>编译，测试</li>
+</ul>
+<h4 id="以字段取代子类-Replace-Subclass-with-Fields"><a href="#以字段取代子类-Replace-Subclass-with-Fields" class="headerlink" title="以字段取代子类 Replace Subclass with Fields"></a>以字段取代子类 Replace Subclass with Fields</h4><p>你的各个子类的唯一差别只在『返回常量数据』的函数身上 -&gt; 修改这些函数，使它们返回超类中的某个（新增）字段，然后销毁子类</p>
+<ul>
+<li>对所有子类使用 Replace Constructor with Factory Method</li>
+<li>如果有任何代码直接引用子类，令它改而引用超类</li>
+<li>针对每个常量函数，在超类中声明一个 final 字段</li>
+<li>为超类声明一个 protected 构造函数，用以初始化这些新增字段</li>
+<li>新建或修改子类构造函数，使他调用超类的新增构造函数</li>
+<li>编译，测试</li>
+<li>在超类中实现所有的常量函数，令它们返回相应字段值，然后将该函数从子类中删掉</li>
+<li>每删除一个常量函数，编译并测试</li>
+<li>子类中所有的常量函数都被删除后，使用 Inline Method 将子类构造函数内联到超类的工厂函数中</li>
+<li>编译，测试</li>
+<li>将子类删掉</li>
+<li>编译，测试</li>
+<li>重复『内联构造函数、删除子类』过程，直到所有子类都被删除</li>
+</ul>
+<h3 id="简化条件表达式"><a href="#简化条件表达式" class="headerlink" title="简化条件表达式"></a>简化条件表达式</h3><p>相比于面向过程程序，免息那个对象程序的条件表达式通常比较少，这是因为很多条件行为都被多态机制处理掉了。多态还有一种十分有用但鲜为人知的用途：通过 Introduce Null Object 去除对于 null 值的检验。</p>
+<h4 id="分解条件表达式-Decompose-Conditional"><a href="#分解条件表达式-Decompose-Conditional" class="headerlink" title="分解条件表达式 Decompose Conditional"></a>分解条件表达式 Decompose Conditional</h4><p>你有一个复杂的条件(if-then-else)语句 -&gt; 从 if, then, else 三个段落中分别提炼出独立函数</p>
+<ul>
+<li>将 if 段落提炼出来，构成一个独立函数</li>
+<li>将 then 段落和 else 段落都提炼出来，各自构成一个独立函数</li>
+</ul>
+<h4 id="合并条件表达式-Consolidate-Conditional-Expression"><a href="#合并条件表达式-Consolidate-Conditional-Expression" class="headerlink" title="合并条件表达式 Consolidate Conditional Expression"></a>合并条件表达式 Consolidate Conditional Expression</h4><p>你有一系列条件测试，都得到相同结果 -&gt; 将这些测试合并为一个条件表达式，并将这个条件表达式提炼成为一个独立函数</p>
+<ul>
+<li>确定这些条件语句都没有副作用（如果条件表达式有副作用，你就不能使用本项重构）</li>
+<li>使用适当的逻辑操作符，将一系列相关条件表达式合并为一个</li>
+<li>编译，测试</li>
+<li>对合并后的表达式实施 Extract Method</li>
+</ul>
+<h4 id="合并重复的条件片段-Consolidate-Duplicate-Conditional-Fragments"><a href="#合并重复的条件片段-Consolidate-Duplicate-Conditional-Fragments" class="headerlink" title="合并重复的条件片段 Consolidate Duplicate Conditional Fragments"></a>合并重复的条件片段 Consolidate Duplicate Conditional Fragments</h4><p>在条件表达式的每个分支上有着相同的一段代码 -&gt; 将折断代码搬移到条件表达式之外</p>
+<ul>
+<li>鉴别出『执行方式不随条件变化而变化』的代码</li>
+<li>如果这些共通代码位于条件表达式起始处，就将它移到条件表达式之前</li>
+<li>如果这些共通代码位于条件表达式尾端，就将它移到条件表达式之后</li>
+<li>如果这些共同代码位于条件表达式中段，就需要观察来向前或向后移动</li>
+<li>如果共通代码不止一条语句，应该先使用 Extract Method 将共通代码提炼到一个独立函数中，再以前面所说的办法来处理</li>
+</ul>
+<h4 id="移除控制标记-Remove-Control-Flag"><a href="#移除控制标记-Remove-Control-Flag" class="headerlink" title="移除控制标记 Remove Control Flag"></a>移除控制标记 Remove Control Flag</h4><p>在一系列布尔表达式中，某个变量带有『控制标记(control flag)』的作用 -&gt; 以 break 语句或 return 语句取代控制标记</p>
+<ul>
+<li>找出让你跳出这段逻辑的控制标记值</li>
+<li>找出对标记变量赋值的语句，代以恰当的 break 语句或 continue 语句</li>
+<li>每次替换后，编译并测试</li>
+<li><p>在未能提供 break 和 continue 语句的编程语言中，可以使用下述办法</p>
+<ul>
+<li>运用 Extract Method，将整段逻辑提炼到一个独立函数中</li>
+<li>找出让你跳出这段逻辑的控制标记值</li>
+<li>找出对标记变量赋值的语句，代以恰当的 return 语句</li>
+<li>每次替换后，编译并测试</li>
+</ul>
+</li>
+</ul>
+<h4 id="以-Guard-语句取代嵌套条件表达式-Replace-Nested-Conditional-with-Guard-Clauses"><a href="#以-Guard-语句取代嵌套条件表达式-Replace-Nested-Conditional-with-Guard-Clauses" class="headerlink" title="以 Guard 语句取代嵌套条件表达式 Replace Nested Conditional with Guard Clauses"></a>以 Guard 语句取代嵌套条件表达式 Replace Nested Conditional with Guard Clauses</h4><p>函数中的条件逻辑使人难以看清正常的执行路径 -&gt; 使用 Guard 语句表现所有特殊情况</p>
+<ul>
+<li>对于每个检查，放进一个 Guard 语句（要么从函数中返回，要么抛出一个异常）</li>
+<li>每次将条件检查替换成 Guard 语句后，编译并测试（如果所有 Guard 语句都导致相同结果，请使用 Consolidate Conditional Expressions）</li>
+</ul>
+<h4 id="以多态取代条件表达式-Replace-Conditional-with-Polymorphism"><a href="#以多态取代条件表达式-Replace-Conditional-with-Polymorphism" class="headerlink" title="以多态取代条件表达式 Replace Conditional with Polymorphism"></a>以多态取代条件表达式 Replace Conditional with Polymorphism</h4><p>你手上有个条件表达式，它根据对象类型的不同而选择不同的行为 -&gt; 将这个条件表达式的每个分支放进一个子类内的覆写函数中，然后将原始函数声明为抽象函数</p>
+<ul>
+<li>如果要处理的表达式是一个更大函数中的一部分，首先对条件表达式进行分析，然后使用 Extract Method 将它提炼到一个独立函数去</li>
+<li>如果有必要，使用 Move Method 将条件表达式放置到继承结构的顶端</li>
+<li>任选一个子类，在其中建立一个函数，使之覆写超类中容纳条件表达式的那个函数。将与该子类相关的条件表达式分支复制到新建函数中，并对它进行适当调整</li>
+<li>编译，测试</li>
+<li>在超类中删掉条件表达式内被复制了的分支</li>
+<li>编译，测试</li>
+<li>针对条件表达式的每个分支，重复上述过程，直到所有分支都被移到子类内的函数为止</li>
+<li>将超类之中容纳条件表达式的函数声明为抽象函数</li>
+</ul>
+<h4 id="引入-Null-对象"><a href="#引入-Null-对象" class="headerlink" title="引入 Null 对象"></a>引入 Null 对象</h4><p>你需要再三检查某对象是否为 null -&gt; 将 null 值替换为 null 对象</p>
+<ul>
+<li>为源类建立一个子类，使其行为就像是源类的 null 版本。在源类和 null 子类中都加上 isNull() 函数，前者的 isNull() 应该返回 false，后者的返回 true</li>
+<li>编译</li>
+<li>找出所有『请求源对象却获得一个 null』 的地方，修改这些地方，使它们改而获得一个空对象</li>
+<li>找出所有『将源对象与 null 做比较的地方』，修改这些地方，使它们调用 isNull() 函数</li>
+<li>编译，测试</li>
+<li>找出这样的程序点：如果对象不是 null，做 A 动作，否则做 B 动作</li>
+<li>对于每一个上述地点，在 null 类中覆写 A 动作，使其行为和 B 动作相同</li>
+<li>使用上述被覆写的动作，然后删除『对象是否等于 null』 的条件测试。编译并测试</li>
+</ul>
+<h4 id="引入断言-Introduce-Assertion"><a href="#引入断言-Introduce-Assertion" class="headerlink" title="引入断言 Introduce Assertion"></a>引入断言 Introduce Assertion</h4><p>某一段代码需要对程序状态做出某种假设 -&gt; 以断言明确表现出这种假设</p>
+<ul>
+<li>如果你发现代码假设某个条件始终为真，就加入一个断言明确说明这种情况</li>
 </ul>
 ]]></content:encoded>
       
-      <comments>http://yoursite.com/2017/04/15/%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92-2017-4-15/#disqus_thread</comments>
+      <comments>http://yoursite.com/2017/06/24/%E3%80%90%E9%87%8D%E6%9E%84-%E6%94%B9%E5%96%84%E6%97%A2%E6%9C%89%E4%BB%A3%E7%A0%81%E7%9A%84%E8%AE%BE%E8%AE%A1%E3%80%91%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>【构建高性能Web站点】读书笔记</title>
+      <link>http://yoursite.com/2017/06/24/%E6%9E%84%E5%BB%BA%E9%AB%98%E6%80%A7%E8%83%BDWeb%E7%AB%99%E7%82%B9%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</link>
+      <guid>http://yoursite.com/2017/06/24/%E6%9E%84%E5%BB%BA%E9%AB%98%E6%80%A7%E8%83%BDWeb%E7%AB%99%E7%82%B9%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</guid>
+      <pubDate>Sat, 24 Jun 2017 02:56:18 GMT</pubDate>
+      <description>
+      
+        &lt;p&gt;高性能Web站点：改善性能和扩展规模的具体做法&lt;/p&gt;
+&lt;h3 id=&quot;一、绪论&quot;&gt;&lt;a href=&quot;#一、绪论&quot; class=&quot;headerlink&quot; title=&quot;一、绪论&quot;&gt;&lt;/a&gt;一、绪论&lt;/h3&gt;&lt;h3 id=&quot;二、数据的网络传输&quot;&gt;&lt;a href=&quot;#二、数据的
+      
+      </description>
+      
+      <content:encoded><![CDATA[<p>高性能Web站点：改善性能和扩展规模的具体做法</p>
+<h3 id="一、绪论"><a href="#一、绪论" class="headerlink" title="一、绪论"></a>一、绪论</h3><h3 id="二、数据的网络传输"><a href="#二、数据的网络传输" class="headerlink" title="二、数据的网络传输"></a>二、数据的网络传输</h3><h3 id="三、服务器并发处理能力"><a href="#三、服务器并发处理能力" class="headerlink" title="三、服务器并发处理能力"></a>三、服务器并发处理能力</h3><h3 id="四、动态内容缓存"><a href="#四、动态内容缓存" class="headerlink" title="四、动态内容缓存"></a>四、动态内容缓存</h3><h3 id="五、动态脚本加速"><a href="#五、动态脚本加速" class="headerlink" title="五、动态脚本加速"></a>五、动态脚本加速</h3><h3 id="六、浏览器缓存"><a href="#六、浏览器缓存" class="headerlink" title="六、浏览器缓存"></a>六、浏览器缓存</h3><h3 id="七、Web服务器缓存"><a href="#七、Web服务器缓存" class="headerlink" title="七、Web服务器缓存"></a>七、Web服务器缓存</h3><h3 id="八、反向代理缓存"><a href="#八、反向代理缓存" class="headerlink" title="八、反向代理缓存"></a>八、反向代理缓存</h3><h3 id="九、Web组件分离"><a href="#九、Web组件分离" class="headerlink" title="九、Web组件分离"></a>九、Web组件分离</h3><h3 id="十、分布式缓存v"><a href="#十、分布式缓存v" class="headerlink" title="十、分布式缓存v"></a>十、分布式缓存v</h3><h3 id="十一、数据库性能优化"><a href="#十一、数据库性能优化" class="headerlink" title="十一、数据库性能优化"></a>十一、数据库性能优化</h3><h3 id="十二、Web负载均衡"><a href="#十二、Web负载均衡" class="headerlink" title="十二、Web负载均衡"></a>十二、Web负载均衡</h3><h3 id="十三、共享文件系统"><a href="#十三、共享文件系统" class="headerlink" title="十三、共享文件系统"></a>十三、共享文件系统</h3><h3 id="十四、内容分发和同步"><a href="#十四、内容分发和同步" class="headerlink" title="十四、内容分发和同步"></a>十四、内容分发和同步</h3><h3 id="十五、分布式文件系统v"><a href="#十五、分布式文件系统v" class="headerlink" title="十五、分布式文件系统v"></a>十五、分布式文件系统v</h3><h3 id="十六、数据库扩展"><a href="#十六、数据库扩展" class="headerlink" title="十六、数据库扩展"></a>十六、数据库扩展</h3><p>当我们对于Web计算和存储都进行了不同程度的扩展后，站点的规模不断的膨胀，这给数据库带来了巨大的查询压力，这时候就需要进行扩展了。在解决性能问题的同时，数据库的扩展还带来一些其他的作用，比如增加存储空间、提高可用性等。下面主要介绍几种常用的数据库扩展思路，它们基本上覆盖了大多数的扩展方式。</p>
+<p>1.复制和分离：</p>
+<p>主从复制，以Mysql为例，它支持主从复制，配置并不复杂，简单来说主要做到以下两点：</p>
+<ul>
+<li>开启主服务器上的二进制日志（log-bin）.</li>
+<li>在主服务器和从服务器上分别进行简单的配置和授权。</li>
+</ul>
+<p>Mysql的主从复制是依据主服务器的二进制日志进行的，也就是说主服务器日志中记录的操作会在从服务器上进行重放，从而实现复制，所以主服务器必须开启二进制日志，它会自动记录所有对数据库产生更新的操作，也包括潜在的更新操作，比如没有删除任何实际记录的DELETE操作。</p>
+<p>读写分离：对于所有的更新操作必须让它作用在主服务器上，这样才能保证所有数据库服务器上的数据一致。这也是任何使用单向复制机制的系统必须遵循的更新原则。这样做不仅保证了多台数据服务器的数据一致性，更重要的是它符合情理，一般而言，大多数站点的数据库读操作要比写操作更加密集。</p>
+<p>读写分离带来的问题：我们必须在应用程序中配置多个数据库连接对象，并且修改数据访问层的代码，的确应用程序应该知道如何区分读写操作，然而对于将读操作分散到多台从服务器上，应用程序就不那么擅长了，简单的随机分配可能造成多台从服务器的工作量不均衡，更重要的是，当某台服务器发生故障时，应用程序并不知道。当然你也可以不修改应用程序，将这部分工作交给数据库反向代理。Mysql Proxy对多个从服务器实现负载均衡以及可用性监测，这些工作由它来做的确非常合适。</p>
+<p>2.垂直分区：</p>
+<p>背景：对于数据库写操作频繁的站点来说仅仅采用主从复制和读写分离可能效果并不是那么明显，假如你的主服务器花费了80%的时间在写数据，那么所有的从服务器也将花费更多的时间来同步数据，可想而知，所有的从服务器只能依靠剩余的不到20%的时间来处理你的select请求，这时候，增加从服务器所获得的回报将越来越少，呈现边际效益递减。</p>
+<p>分离方法：将不同的数据库分布到不同的服务器上，你会发现很多的数据库之间并不存在关系，或者不需要进行（JOIN）查询，我们将如用户的博客数据和好友数据库分别转移到独立的数据库服务器上，这种方式称为垂直分区。</p>
+<p>3.水平分区：</p>
+<p>当对于数据库表也达到写操作极限的时候就该换一种思路进行水平分区了。</p>
+<p>水平分区（Sharding）意味着我们可以将同一数据表中的记录通过特定的算法进行分离，分别保存在不同的数据表中，从而可以部署在不同的数据库服务器上。</p>
+<p>一般会使用分区的主键或者外键，主键的话不能是auto_increment类型的，采用一致性Hash算法进行数据的分区，这是一种水平的分区。再加入反向代理处理负载均衡以及可用性检测的工作等。</p>
+<h3 id="十七、分布式计算"><a href="#十七、分布式计算" class="headerlink" title="十七、分布式计算"></a>十七、分布式计算</h3><h3 id="十八、性能监控"><a href="#十八、性能监控" class="headerlink" title="十八、性能监控"></a>十八、性能监控</h3>]]></content:encoded>
+      
+      <comments>http://yoursite.com/2017/06/24/%E6%9E%84%E5%BB%BA%E9%AB%98%E6%80%A7%E8%83%BDWeb%E7%AB%99%E7%82%B9%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/#disqus_thread</comments>
     </item>
     
     <item>
@@ -221,8 +633,8 @@
     
     <item>
       <title>Sun的jdk命令行工具</title>
-      <link>http://yoursite.com/2017/03/16/jvm%E7%9A%84jdk%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%E5%92%8Cjava%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/</link>
-      <guid>http://yoursite.com/2017/03/16/jvm%E7%9A%84jdk%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%E5%92%8Cjava%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/</guid>
+      <link>http://yoursite.com/2017/03/16/jvm%E7%9A%84jdk%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7/</link>
+      <guid>http://yoursite.com/2017/03/16/jvm%E7%9A%84jdk%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7/</guid>
       <pubDate>Thu, 16 Mar 2017 03:58:43 GMT</pubDate>
       <description>
       
@@ -276,31 +688,7 @@
 </table>
 ]]></content:encoded>
       
-      <comments>http://yoursite.com/2017/03/16/jvm%E7%9A%84jdk%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%E5%92%8Cjava%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E7%82%B9%E5%AD%A6%E4%B9%A0/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>ha3 3.0(待补充)</title>
-      <link>http://yoursite.com/2017/03/16/ha3-3-0/</link>
-      <guid>http://yoursite.com/2017/03/16/ha3-3-0/</guid>
-      <pubDate>Thu, 16 Mar 2017 03:57:58 GMT</pubDate>
-      <description>
-      
-      </description>
-      
-      <comments>http://yoursite.com/2017/03/16/ha3-3-0/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>成长集&lt;&lt;电子书一期&gt;&gt;(待补充)</title>
-      <link>http://yoursite.com/2017/03/16/%E6%88%90%E9%95%BF%E9%9B%86-%E7%94%B5%E5%AD%90%E4%B9%A6%E4%B8%80%E6%9C%9F/</link>
-      <guid>http://yoursite.com/2017/03/16/%E6%88%90%E9%95%BF%E9%9B%86-%E7%94%B5%E5%AD%90%E4%B9%A6%E4%B8%80%E6%9C%9F/</guid>
-      <pubDate>Thu, 16 Mar 2017 03:55:41 GMT</pubDate>
-      <description>
-      
-      </description>
-      
-      <comments>http://yoursite.com/2017/03/16/%E6%88%90%E9%95%BF%E9%9B%86-%E7%94%B5%E5%AD%90%E4%B9%A6%E4%B8%80%E6%9C%9F/#disqus_thread</comments>
+      <comments>http://yoursite.com/2017/03/16/jvm%E7%9A%84jdk%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7/#disqus_thread</comments>
     </item>
     
     <item>
@@ -310,7 +698,45 @@
       <pubDate>Thu, 16 Mar 2017 03:54:57 GMT</pubDate>
       <description>
       
+        &lt;p&gt;下一本书开始阅读完java并发编程实战，记录一些学习笔记如下作为自己的读书笔记进行记录。&lt;/p&gt;
+&lt;h3 id=&quot;第二章、基础知识&quot;&gt;&lt;a href=&quot;#第二章、基础知识&quot; class=&quot;headerlink&quot; title=&quot;第二章、基础知识&quot;&gt;&lt;/a&gt;第二章、基础知识&lt;/
+      
       </description>
+      
+      <content:encoded><![CDATA[<p>下一本书开始阅读完java并发编程实战，记录一些学习笔记如下作为自己的读书笔记进行记录。</p>
+<h3 id="第二章、基础知识"><a href="#第二章、基础知识" class="headerlink" title="第二章、基础知识"></a>第二章、基础知识</h3><p>2.1.线程安全性：</p>
+<ul>
+<li>当多个线程访问某个类的时候，这个类始终都能表现出正确的行为，那么就称这个类是线程安全的。线程安全的核心在于正确性。</li>
+</ul>
+<p>2.2.原子性：</p>
+<p>竞态条件和复合操作，</p>
+<ul>
+<li>常见的一种竞态条件类型是“Check-Then-Act”，先检查后执行，即通过一个可能失效的观测结果来决定下一步的动作。</li>
+<li>复合操作是指“先检查后操作”以及“读取-修改-写入”这种操作。</li>
+</ul>
+<p>2.3.加锁机制：内置锁和重入，</p>
+<ul>
+<li>内置锁即synchronized block，包括两部分：一个作为锁的对象引用，一个作为由这个锁保护的代码块。</li>
+<li>重入：如果某个线程试图获得一个已经由它持有的锁，那么这个请求就会成功。</li>
+</ul>
+<p>2.4.用锁来保护状态：</p>
+<ul>
+<li>复合操作需要额外的加锁机制。</li>
+</ul>
+<p>2.5.活跃性和性能：</p>
+<ul>
+<li>活跃性问题的形式之一就是无意之中造成的无限循环问题。<br>* 性能相关：当执行时间较长的计算或者可能无法快速完成的操作时，例如：网络IO或者控制台IO时，一定不要持有锁。</li>
+</ul>
+<h3 id="第三章、对象的共享"><a href="#第三章、对象的共享" class="headerlink" title="第三章、对象的共享"></a>第三章、对象的共享</h3><p>3.1.可见性</p>
+<ul>
+<li>volatile变量是Java语言提供的一种稍弱的同步机制，用来确保将变量的更新操作通知到其他线程。</li>
+</ul>
+<p>使用volatile变量的条件，当且仅当满足以下条件才可以使用volatile变量：<br>1.对变量的写入操作不依赖变量的当前值，或者你可以保证只有单个线程更新变量的值；<br>2.该变量不会与其他状态变量一起纳入不变性条件中；<br>3.在访问变量时不需要加锁。</p>
+<ul>
+<li>在并发程序中使用和共享对象时，可以使用一些实用的策略，包括：<br>1.线程封闭。线程封闭的对象只能由一个线程拥有，对象被封闭在该线程中，并且只能由这个线程修改。<br>2.只读共享。在没有额外同步的情况下，共享的只读对象可以由多个线程并发访问，但任何线程都不能修改它。共享的只读对象包括不可变对象和事实不可变对象。<br>3.线程安全共享。线程安全的对象在其内部实现同步，因此多个线程可以通过对象的公有接口来进行访问而不需要进行进一步的同步。<br>4.保护对象。被保护的对象只能通过持有特定的锁来访问。线程安全对象包括封装在其他线程安全对象中的对象，以及已发布的并且由某个特定的锁保护的对象。</li>
+</ul>
+<h3 id="第四章、对象的组合"><a href="#第四章、对象的组合" class="headerlink" title="第四章、对象的组合"></a>第四章、对象的组合</h3><p>4.1设计线程安全的类<br>4.1.1收集同步需求<br>4.1.2依赖状态的操作<br>4.1.3状态的所有权<br>4.2实例封闭<br>4.2.1Java监视器模式<br>4.2.2示例：车辆追踪<br>4.3线程安全性的委托<br>4.3.1基于委托的车辆追踪器<br>4.3.2独立的状态变量<br>4.3.3当委托失效时<br>4.3.4发布底层的状态变量<br>4.3.5示例：发布状态的车辆追踪器<br>4.4在现有的线程安全类中添加功能<br>4.4.1客户端加锁机制<br>4.4.2组合<br>4.5将同步策略文档化</p>
+]]></content:encoded>
       
       <comments>http://yoursite.com/2017/03/16/java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%BD%93%E7%B3%BB/#disqus_thread</comments>
     </item>

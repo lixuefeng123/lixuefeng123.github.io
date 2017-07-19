@@ -6,18 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>tags | blog</title>
+  <title>jvm 垃圾回收 | blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="This is my blog">
-<meta property="og:type" content="website">
-<meta property="og:title" content="tags">
-<meta property="og:url" content="http://yoursite.com/tags/index.html">
+  <meta name="description" content="写这篇文章的目的在于一个读书之后的提炼，读完《深入理解java虚拟机》这本书之后深感需要提炼下关键的知识点，这样针对具体的问题记忆会更加深刻。接下来我将以问题对话的形式记录jvm-垃圾回收的相关知识点。先附上原文的一个链接link
+问：1.地球人都知道，Java有个东西叫垃圾收集器，他让创建的对象不需要像c/cpp那样delete或者free掉，你能不能谈谈,GC是在什么时候，对什么东西，做了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jvm 垃圾回收">
+<meta property="og:url" content="http://yoursite.com/2017/06/24/jvm-垃圾回收/index.html">
 <meta property="og:site_name" content="blog">
-<meta property="og:description" content="This is my blog">
-<meta property="og:updated_time" content="2017-03-17T13:48:58.000Z">
+<meta property="og:description" content="写这篇文章的目的在于一个读书之后的提炼，读完《深入理解java虚拟机》这本书之后深感需要提炼下关键的知识点，这样针对具体的问题记忆会更加深刻。接下来我将以问题对话的形式记录jvm-垃圾回收的相关知识点。先附上原文的一个链接link
+问：1.地球人都知道，Java有个东西叫垃圾收集器，他让创建的对象不需要像c/cpp那样delete或者free掉，你能不能谈谈,GC是在什么时候，对什么东西，做了">
+<meta property="og:updated_time" content="2017-06-25T07:10:42.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tags">
-<meta name="twitter:description" content="This is my blog">
+<meta name="twitter:title" content="jvm 垃圾回收">
+<meta name="twitter:description" content="写这篇文章的目的在于一个读书之后的提炼，读完《深入理解java虚拟机》这本书之后深感需要提炼下关键的知识点，这样针对具体的问题记忆会更加深刻。接下来我将以问题对话的形式记录jvm-垃圾回收的相关知识点。先附上原文的一个链接link
+问：1.地球人都知道，Java有个东西叫垃圾收集器，他让创建的对象不需要像c/cpp那样delete或者free掉，你能不能谈谈,GC是在什么时候，对什么东西，做了">
   
     <link rel="alternative" href="/atom.xml" title="blog" type="application/atom+xml">
   
@@ -149,20 +152,20 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="page-undefined" class="article article-type-page " itemscope itemprop="blogPost">
+            <article id="post-jvm-垃圾回收" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      tags
+      jvm 垃圾回收
     </h1>
   
 
         
-        <a href="/tags/index.html" class="archive-article-date">
-  	<time datetime="2017-03-17T13:48:29.000Z" itemprop="datePublished">2017-03-17</time>
+        <a href="/2017/06/24/jvm-垃圾回收/" class="archive-article-date">
+  	<time datetime="2017-06-24T09:57:59.000Z" itemprop="datePublished">2017-06-24</time>
   	<span id="busuanzi_container_page_pv" style="color:DarkGray">
       view <span id="busuanzi_value_page_pv"></span> times
     </span>
@@ -175,7 +178,41 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>写这篇文章的目的在于一个读书之后的提炼，读完《深入理解java虚拟机》这本书之后深感需要提炼下关键的知识点，这样针对具体的问题记忆会更加深刻。接下来我将以问题对话的形式记录jvm-垃圾回收的相关知识点。<br>先附上原文的一个链接<a href="http://icyfenix.iteye.com/blog/715301" target="_blank" rel="external">link</a></p>
+<p>问：1.地球人都知道，Java有个东西叫垃圾收集器，他让创建的对象不需要像c/cpp那样delete或者free掉，你能不能谈谈,GC是在什么时候，对什么东西，做了什么事情？</p>
+<p>答：首先是什么时候，回答这个问题需要介绍下HotSpot JVM对于堆的划分，它将堆划分为Young区和Old区，Young区分为Eden区和survivor1和survivor2三部分。其中GC又分为minor GC（新生代）和full GC（年老代）,其中minor GC发生的条件是Eden区满了的时候，大多数的Java对象具有朝生夕灭的特性，所以Minor GC非常频繁，一般回收速度也比较快。老年代GC（也叫Full GC），指发生在老年代的GC，当升到老年代的对象大于老年代的剩余空间时触发Full GC,其中GC时间与非GC时间耗时比例超GCTIMERATE的限制会触发OOM。</p>
+<p>对什么东西：对从GC root搜索找不到的对象，而且经过第一次标记、清理之后仍然没有复活的对象进行回收。</p>
+<p>做了什么事情:能说出诸如新生代做的是复制清理、from survivor、to survivor是干啥用的、老年代做的是标记清理、标记清理后碎片需要整理、复制清理和标记清理有有什么优劣势等。</p>
+<p>复制清理：将内存容量划分为大小相等的两块，每次只使用其中一块，然后用完再将存活的对象复制到另一块，将原先的内存块清理掉，实现简单并且运行高效。只是这种算法的代价是将内存缩小为原来的一半，有点高了。v<br>标记清理：复制清理在对象存活率较高时就要进行较多的复制操作，效率将会变低。更关键的是如果不想浪费50%的空间，就需要有额外的空间进行分配担保，以应对被使用的内存中所有的对象都100%存活的极端情况。所以老年代一般不采用这种算法。标记清理的标记过程和“标记-清除”算法一样，但后续的步骤不是直接对可回收对象进行清理，而是让所有存活的对象都向一端移动，然后直接清理掉端边界以外的内存。</p>
+<p>问：2.Java和C++在内存分配和管理上有什么区别？</p>
+<p>答：Java与C++之间有一堵由动态内存分配和垃圾收集技术所围成的高墙，墙外面的人想进去，墙里面的人想出来。  对于从事C和C++程序开发的开发人员来说，在内存管理领域，他们既是拥有最高权利的皇帝，也是从事最基础工作的劳动人民—–既拥有每一个对象的所有权，又担负着每一个对象从生命开始到终结的维护责任。 对于Java程序员来说，虚拟机的自动内存分配机制的帮助下，不再需要为每一个new操作去写配对的delete/free代码，而且不容易出现内存泄露和内存溢出问题，看起来由虚拟机管理内存一切都很美好。不过，也正是因为Java程序员把内存控制的权利交给Java虚拟机，一旦出现内存泄露和溢出方面的问题，如果不了解虚拟机是怎样使用内存的，那排查错误将会是一项异常艰难的工作。并且好的Java程序在编写的时候肯定要考虑GC的问题，怎样定义static对象，怎样new对象效率更高等等问题，简称面向GC的编程也可以说Java的内存分配管理是一种托管的方式，托管于JVM。C++经过编译时直接编译成机器码，而Java是编译成字节码，由JVM解释执行。C++是编译型语言，而Java兼具编译型和解释型语言的特点。</p>
+<p>问：3.java虚拟机规范将JVM虚拟机所管理的内存分为几部分？</p>
+<p>答：</p>
+<ul>
+<li>程序计数器：是一块较小的内存空间，它的作用可以看做是当前线程所执行字节码的行号指示器，属于线程私有，和线程的生命周期相同。</li>
+<li>Java虚拟机栈：线程私有，生命周期和线程相同。Java虚拟机栈描述的是Java方法（区别于native的本地方法）执行的内存模型，每个方法被执行的时候会同时创建一个栈帧用于存储局部变量表、操作栈、动作链接、方法出口等信息。每个方法被调用直到执行完成的过程，都对应着一个栈帧在虚拟机栈中入栈和出栈的过程。</li>
+<li>本地方法栈：与虚拟机栈所发挥的作用是非常相似的，其区别不过是虚拟机栈为虚拟机执行Java方法(也就是字节码)服务，而本地方法栈则为虚拟机所使用到的Native方法服务。</li>
+<li>方法区：用于存储已被虚拟机加载的类信息、常量、静态变量等，被所有的线程所共享。</li>
+<li>java堆：被所有的线程所共享，所有的对象实例以及数组都要在堆上分配，class对象也在这里。</li>
+</ul>
+<p>问：4.有哪些方法可以判断一个对象已经可以被回收，JVM怎么判断一个对象已经消亡可以被回收？</p>
+<p>答：</p>
+<p>1.引用计数算法：给对象中添加一个引用计数器，每当有一个地方引用它时，计数器就加1；当引用失效时，计数器值就减1；任何时刻计数器都为0的对象就是不可能再被使用的。         Java语言没有选用引用计数法来管理内存，因为引用计数法不能很好的解决循环引用的问题。<br>2.根搜索算法：在主流的商用语言中，都是使用根搜索算法来判定对象是否存活的。GC Root Tracing 算法思路就是通过一系列的名为”GC  Roots”的对象作为起始点，从这些节点开始向下搜索，搜索所走过的路径称为引用链（Reference Chain），当一个对象到GC Roots没有任何引用链相连，即从GC Roots到这个对象不可达，则证明此对象是不可用的。</p>
+<p>问：5.那些对象可以作为GC Roots？</p>
+<p>答：</p>
+<ul>
+<li>虚拟机栈（栈帧中的本地变量表）中的引用的对象</li>
+<li>方法区中的类静态属性引用的对象</li>
+<li>方法区中的常量引用的对象</li>
+<li>本地方法栈中JNI（Native方法）的引用对象</li>
+</ul>
+<p>问：6.java代码编译的结果？</p>
+<p>答：是字节码文件.class</p>
+<p>问：7.Java中的static变量和static方法在vJVM运行中的内存分配有什么不同？</p>
+<p>答：<br>比较条目 | 静态对象 | 非静态对象<br>—-|——|—-<br>拥有属性： | 是类共同拥有的  | 是类各对象独立拥有的<br>内存分配： | 内存空间上是固定的  | 空间在各个附属类里面分配<br>分配顺序： | 先分配静态对象的空间  | 继而再对非静态对象分配空间，初始化顺序是先静态</p>
+<p>问：8.在heap中没有类实例的时候，类信息还存在于JVM吗？ 存在于什么地方？</p>
+<p>答：存在，应该是在方法区，包括类信息和常量等，对象的引用在java虚拟机栈中。</p>
+
       
 
       
@@ -254,7 +291,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/tags/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/06/24/jvm-垃圾回收/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -266,13 +303,41 @@
 </article>
 
   
+<nav id="article-nav">
+  
+  
+    <a href="/2017/06/24/jvm-类加载/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">jvm 类加载</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 
 
 
 
   
-    <div class="duoshuo"></div>
+  <div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="jvm-垃圾回收" data-title="jvm 垃圾回收" data-url="http://yoursite.com/2017/06/24/jvm-垃圾回收/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"ilacoder"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
   
 
 
@@ -299,7 +364,7 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
