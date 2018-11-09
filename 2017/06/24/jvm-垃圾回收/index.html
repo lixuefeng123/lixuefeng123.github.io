@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="blog">
 <meta property="og:description" content="写这篇文章的目的在于一个读书之后的提炼，读完《深入理解java虚拟机》这本书之后深感需要提炼下关键的知识点，这样针对具体的问题记忆会更加深刻。接下来我将以问题对话的形式记录jvm-垃圾回收的相关知识点。先附上原文的一个链接link
 问：1.地球人都知道，Java有个东西叫垃圾收集器，他让创建的对象不需要像c/cpp那样delete或者free掉，你能不能谈谈,GC是在什么时候，对什么东西，做了">
-<meta property="og:updated_time" content="2017-06-25T07:10:42.000Z">
+<meta property="og:updated_time" content="2017-11-25T14:26:41.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="jvm 垃圾回收">
 <meta name="twitter:description" content="写这篇文章的目的在于一个读书之后的提炼，读完《深入理解java虚拟机》这本书之后深感需要提炼下关键的知识点，这样针对具体的问题记忆会更加深刻。接下来我将以问题对话的形式记录jvm-垃圾回收的相关知识点。先附上原文的一个链接link
@@ -241,6 +241,21 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">GC</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">G1</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -430,10 +445,6 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Hello</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
               </li>
              
@@ -443,6 +454,14 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Jvm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">vue.js</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">highcharts.js</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -458,11 +477,39 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vue.js</a>
+                <a href="javascript:void(0)" class="js-tag color1">类加载体系</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">highcharts.js</a>
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">并发编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">AI</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">GC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">G1</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
             
             <div class="clearfix"></div>

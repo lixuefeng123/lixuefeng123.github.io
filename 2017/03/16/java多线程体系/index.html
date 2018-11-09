@@ -6,7 +6,7 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>java多线程体系(待补充) | blog</title>
+  <title>java多线程体系 | blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="下一本书开始阅读完java并发编程实战，记录一些学习笔记如下作为自己的读书笔记进行记录。
 第二章、基础知识2.1.线程安全性：
@@ -18,7 +18,7 @@
 
 常见的一种竞态条件类型是“Check-Then-Act”，先检查后执行，即通过一个可能失效的观测结果来决定下">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java多线程体系(待补充)">
+<meta property="og:title" content="java多线程体系">
 <meta property="og:url" content="http://yoursite.com/2017/03/16/java多线程体系/index.html">
 <meta property="og:site_name" content="blog">
 <meta property="og:description" content="下一本书开始阅读完java并发编程实战，记录一些学习笔记如下作为自己的读书笔记进行记录。
@@ -30,9 +30,9 @@
 竞态条件和复合操作，
 
 常见的一种竞态条件类型是“Check-Then-Act”，先检查后执行，即通过一个可能失效的观测结果来决定下">
-<meta property="og:updated_time" content="2017-07-05T13:10:37.000Z">
+<meta property="og:updated_time" content="2017-11-25T14:26:41.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="java多线程体系(待补充)">
+<meta name="twitter:title" content="java多线程体系">
 <meta name="twitter:description" content="下一本书开始阅读完java并发编程实战，记录一些学习笔记如下作为自己的读书笔记进行记录。
 第二章、基础知识2.1.线程安全性：
 
@@ -180,7 +180,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      java多线程体系(待补充)
+      java多线程体系
     </h1>
   
 
@@ -231,8 +231,17 @@
 <ul>
 <li>在并发程序中使用和共享对象时，可以使用一些实用的策略，包括：<br>1.线程封闭。线程封闭的对象只能由一个线程拥有，对象被封闭在该线程中，并且只能由这个线程修改。<br>2.只读共享。在没有额外同步的情况下，共享的只读对象可以由多个线程并发访问，但任何线程都不能修改它。共享的只读对象包括不可变对象和事实不可变对象。<br>3.线程安全共享。线程安全的对象在其内部实现同步，因此多个线程可以通过对象的公有接口来进行访问而不需要进行进一步的同步。<br>4.保护对象。被保护的对象只能通过持有特定的锁来访问。线程安全对象包括封装在其他线程安全对象中的对象，以及已发布的并且由某个特定的锁保护的对象。</li>
 </ul>
-<h3 id="第四章、对象的组合"><a href="#第四章、对象的组合" class="headerlink" title="第四章、对象的组合"></a>第四章、对象的组合</h3><p>4.1设计线程安全的类<br>4.1.1收集同步需求<br>4.1.2依赖状态的操作<br>4.1.3状态的所有权<br>4.2实例封闭<br>4.2.1Java监视器模式<br>4.2.2示例：车辆追踪<br>4.3线程安全性的委托<br>4.3.1基于委托的车辆追踪器<br>4.3.2独立的状态变量<br>4.3.3当委托失效时<br>4.3.4发布底层的状态变量<br>4.3.5示例：发布状态的车辆追踪器<br>4.4在现有的线程安全类中添加功能<br>4.4.1客户端加锁机制<br>4.4.2组合<br>4.5将同步策略文档化</p>
-
+<h3 id="第四章、对象的组合"><a href="#第四章、对象的组合" class="headerlink" title="第四章、对象的组合"></a>第四章、对象的组合</h3><p>4.1设计线程安全的类<br>4.1.1收集同步需求<br>4.1.2依赖状态的操作<br>4.1.3状态的所有权<br>4.2实例封闭<br>4.2.1Java监视器模式<br>4.2.2示例：车辆追踪<br>4.3线程安全性的委托<br>4.3.1基于委托的车辆追踪器<br>4.3.2独立的状态变量<br>4.3.3当委托失效时<br>4.3.4发布底层的状态变量<br>4.3.5示例：发布状态的车辆追踪器<br>4.4在现有的线程安全类中添加功能<br>4.4.1客户端加锁机制</p>
+<p>Java的ReentrantLock和synchronized两种锁定机制的对比：</p>
+<p>ReentrantLock类实现了Lock，它拥有与synchronized相同的并发性和内存语义，但是添加了类似锁投票、定时锁等候和可中断锁等候的一些特性。此外，它还提供了在激烈争用情况下更佳的性能。（换句话说，当许多线程都想访问共享资源时，JVM 可以花更少的时候来调度线程，把更多时间用在执行线程上。）</p>
+<p>ReentrantLock默认的构造函数实现的是一个不公平锁，公平锁使线程按照请求锁的顺序依次获得锁；而不公平锁则允许讨价还价，在这种情况下，线程有时可以比先请求锁的其他线程先得到锁。公平锁带来额外的性能成本，需要诸如记账和同步。</p>
+<p>还不要抛弃synchronized</p>
+<ul>
+<li>因为对于java.util.concurrent.lock中的锁定类来说，synchronized 仍然有一些优势。比如，在使用 ReentrantLock 的时候，不能忘记释放锁；在退出synchronized块时，JVM 会为您做这件事。您很容易忘记用finally块释放锁，这对程序非常有害。您的程序能够通过测试，但会在实际工作中出现死锁，那时会很难指出原因;</li>
+<li>当 JVM 用 synchronized 管理锁定请求和释放时，JVM 在生成线程转储时能够包括锁定信息。这些对调试非常有价值，因为它们能标识死锁或者其他异常行为的来源。Lock类只是普通的类，JVM 不知道具体哪个线程拥有Lock对象。而且，几乎每个开发人员都熟悉 synchronized，它可以在 JVM 的所有版本中工作。</li>
+</ul>
+<p>4.4.2组合<br>4.5将同步策略文档化</p>
+<h3 id="第五章、基础构建模块"><a href="#第五章、基础构建模块" class="headerlink" title="第五章、基础构建模块"></a>第五章、基础构建模块</h3>
       
 
       
@@ -261,6 +270,21 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">多线程</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">并发编程</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -336,7 +360,7 @@
   
   
     <a href="/2017/03/16/机器学习扫盲/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">机器学习扫盲(待补充)</div>
+      <div class="article-nav-title">使用Tensorflow实现CNN图像识别(待补充)</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -350,7 +374,7 @@
   
   <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="java多线程体系" data-title="java多线程体系(待补充)" data-url="http://yoursite.com/2017/03/16/java多线程体系/"></div>
+	<div class="ds-thread" data-thread-key="java多线程体系" data-title="java多线程体系" data-url="http://yoursite.com/2017/03/16/java多线程体系/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
@@ -459,10 +483,6 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Hello</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
               </li>
              
@@ -472,6 +492,14 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Jvm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">vue.js</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">highcharts.js</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -487,11 +515,39 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vue.js</a>
+                <a href="javascript:void(0)" class="js-tag color1">类加载体系</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">highcharts.js</a>
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">并发编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">AI</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">GC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">G1</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
             
             <div class="clearfix"></div>
