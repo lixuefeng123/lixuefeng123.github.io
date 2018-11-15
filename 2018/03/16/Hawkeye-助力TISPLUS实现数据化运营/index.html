@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hawkeye," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Li Xuefeng's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="背景阅读本文的同时，建议大家先阅读洪震的文章《阿里集团搜索中台TisPlus》。TISPLUS平台的数据分析能力主要由hawkeye提供，但是之前存在如下几个问题：1.数据化场景的功能没有凸显，隐藏较深；2.产品形态设计单一，没有一个较好的产品闭环引导用户关注数据化的结果；3.数据分析内容简单，覆盖面不足，远远达不到让用户数据化运营服务的目标；4.重点关注了数据分析的结果，但缺少衡量数据分析结果为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hawkeye:助力TISPLUS实现数据化运营">
+<meta property="og:url" content="http://yoursite.com/2018/03/16/Hawkeye-助力TISPLUS实现数据化运营/index.html">
+<meta property="og:site_name" content="Li Xuefeng's Blog">
+<meta property="og:description" content="背景阅读本文的同时，建议大家先阅读洪震的文章《阿里集团搜索中台TisPlus》。TISPLUS平台的数据分析能力主要由hawkeye提供，但是之前存在如下几个问题：1.数据化场景的功能没有凸显，隐藏较深；2.产品形态设计单一，没有一个较好的产品闭环引导用户关注数据化的结果；3.数据分析内容简单，覆盖面不足，远远达不到让用户数据化运营服务的目标；4.重点关注了数据分析的结果，但缺少衡量数据分析结果为">
+<meta property="og:image" content="https://private-alipayobjects.alipay.com/alipay-rmsdeploy-image/skylark/png/bcb48fa6-6a23-43bc-8d6f-e42f1d9395e3.png">
+<meta property="og:image" content="https://private-alipayobjects.alipay.com/alipay-rmsdeploy-image/skylark/png/95244682-77a6-42bc-85e1-86210551bdd6.png">
+<meta property="og:image" content="https://private-alipayobjects.alipay.com/alipay-rmsdeploy-image/skylark/png/bd4bc31d-018c-4519-bc31-cf58936e55c0.png">
+<meta property="og:image" content="https://private-alipayobjects.alipay.com/alipay-rmsdeploy-image/skylark/png/d5030783-ce6d-4b2a-b68f-961cb0776a86.png">
+<meta property="og:image" content="https://private-alipayobjects.alipay.com/alipay-rmsdeploy-image/skylark/png/27961e13-8d93-42d4-b095-96ba0e518272.png">
+<meta property="og:image" content="https://private-alipayobjects.alipay.com/alipay-rmsdeploy-image/skylark/png/8fe6faba-915b-4b8e-b6f4-55a54db8211d.png">
+<meta property="og:image" content="https://private-alipayobjects.alipay.com/alipay-rmsdeploy-image/skylark/png/49df5c7a-8ba1-47d3-86bf-106faf1eb43c.png">
+<meta property="og:image" content="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/d54adf49e120eff1c067bc9ca3ce81a6.png">
+<meta property="og:updated_time" content="2018-11-14T12:02:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hawkeye:助力TISPLUS实现数据化运营">
+<meta name="twitter:description" content="背景阅读本文的同时，建议大家先阅读洪震的文章《阿里集团搜索中台TisPlus》。TISPLUS平台的数据分析能力主要由hawkeye提供，但是之前存在如下几个问题：1.数据化场景的功能没有凸显，隐藏较深；2.产品形态设计单一，没有一个较好的产品闭环引导用户关注数据化的结果；3.数据分析内容简单，覆盖面不足，远远达不到让用户数据化运营服务的目标；4.重点关注了数据分析的结果，但缺少衡量数据分析结果为">
+<meta name="twitter:image" content="https://private-alipayobjects.alipay.com/alipay-rmsdeploy-image/skylark/png/bcb48fa6-6a23-43bc-8d6f-e42f1d9395e3.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/16/Hawkeye-助力TISPLUS实现数据化运营/"/>
+
+
+
+
+
+  <title>Hawkeye:助力TISPLUS实现数据化运营 | Li Xuefeng's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Li Xuefeng's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">To be or not! Try your best!</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/16/Hawkeye-助力TISPLUS实现数据化运营/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Li Xuefeng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/author.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Li Xuefeng's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hawkeye:助力TISPLUS实现数据化运营</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-16T14:57:12+08:00">
+                2018-03-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/智能运维/" itemprop="url" rel="index">
+                    <span itemprop="name">智能运维</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/03/16/Hawkeye-助力TISPLUS实现数据化运营/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/03/16/Hawkeye-助力TISPLUS实现数据化运营/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>阅读本文的同时，建议大家先阅读洪震的文章《<a href="https://yq.aliyun.com/articles/402309?spm=a2c4e.11153959.0.0.742f6aa6k97cfp" target="_blank" rel="external">阿里集团搜索中台TisPlus</a>》。TISPLUS平台的数据分析能力主要由hawkeye提供，但是之前存在如下几个问题：1.数据化场景的功能没有凸显，隐藏较深；2.产品形态设计单一，没有一个较好的产品闭环引导用户关注数据化的结果；3.数据分析内容简单，覆盖面不足，远远达不到让用户数据化运营服务的目标；4.重点关注了数据分析的结果，但缺少衡量数据分析结果为搜索服务本身带来的价值大小。我们深知数据必须和业务、平台本身做深度结合才能产生其核心价值，为了助力TISPLUS平台数据化能力建设，更好的发挥hawjeye的作用，我们项目小组进行了诸如数据化需求调研分析、产品视觉稿设计、hawkeye平台拆分、在TISPLUS平台落地数据化等一系列工作。</p>
+<h2 id="hawkeye简介"><a href="#hawkeye简介" class="headerlink" title="hawkeye简介"></a>hawkeye简介</h2><p>hawkeye是一个数据分析产品，定位于协助维护及优化线上系统，包括但不限于ha3、sp、igraph等引擎，目前主要基于tisplus平台，进行ha3引擎的数据分析以及引擎优化，诸如慢查询、引擎schema合理性、服务稳定性、资源配置合理性的检测及优化等。</p>
+<blockquote>
+<p>系统简介</p>
+</blockquote>
+<p><img src="https://private-alipayobjects.alipay.com/alipay-rmsdeploy-image/skylark/png/bcb48fa6-6a23-43bc-8d6f-e42f1d9395e3.png" alt="hawkeye平台.png | center | 704x479"></p>
+<p>1.hawkeye平台经过拆分后大体分为三部分</p>
+<ul>
+<li>hawkeye-blink：基于Blink完成数据处理的工作，重点是访问日志分析、全量数据分析等，该工程侧重底层的数据分析，借助Blink强大的数据处理能力，每天对于TISPLUS平台所有Ha3应用的访问日志以及全量数据进行分析，工程处理流程图如下：</li>
+</ul>
+<p><img src="https://private-alipayobjects.alipay.com/alipay-rmsdeploy-image/skylark/png/95244682-77a6-42bc-85e1-86210551bdd6.png" alt="Blink工程数据处理流程图.png | center | 704x288"></p>
+<ul>
+<li>hawkeye-experience：基于hawkeye-blink的分析结果进行更加贴近用户的分析，比如字段信息监测，包括字段类型合理性，字段值单调性监测等，除此之外还包括但不限于kmon无效报警、冒烟case录入情况、引擎降级配置、内存相关配置、推荐行列数配置以及切换时最小服务行比例等检测，hawkeye-experience工程的定位是做一个引擎诊断规则中台，将平时运维人员优化维护引擎的宝贵经验沉淀到系统中来，让每一个新接入的应用可以快速享受这样的宝贵经验，而不是通过一次次的踩坑之后获得，让每位用户拥有一个类似智能诊断专家的角色来优化自己的引擎是我们的目标，也是我们持续奋斗的动力,其中hawkeye-experience的数据处理流程图如下所示：</li>
+</ul>
+<p><img src="https://private-alipayobjects.alipay.com/alipay-rmsdeploy-image/skylark/png/bd4bc31d-018c-4519-bc31-cf58936e55c0.png" alt="hawkeye-experience.png | center | 704x623"></p>
+<ul>
+<li>hawkeye-console：web层，提供hawkeye分析结果的各种api以及可视化的监控图表输出。</li>
+</ul>
+<p>2.TISPLUS-Ha3平台：搜索引擎服务平台，目前接入了商品中心IC、聚划算、村淘、盒马、评价、优酷、咸鱼、飞猪、lazada等重要业务；<br>3.TISPLUS-sp平台：sp+ha3组成一个完成的引擎服务；<br>4.airflow/matt：搜索调度平台(后更名为matt)，hawkeye有约上百个分析任务，有些是脚本式任务，有些需要上传资源文件，诸如java jar，bash script等，每天有定时触发以及手动触发等多种类型，airflow/matt很好的支持了hawkeye的任务调度；<br>5.容量评估平台：刚上线的应用如何申请资源？有点懵，别上火，容量评估告诉你,容量评估数据的得出，得益于heracles（压测平台）支持大促压测、日常化压测以及容量评估。<br>6.成本平台：数据分析结果为搜索服务带来的价值几何？成本平台衔接数据化运营及其价值，服务优化带来的价值清晰可见；<br>7.sophon：智能化运维平台，目前主要从sophon获取应用关于引擎的一些配置信息，后续将和智能化运维结合，更好的发挥hawkeye在数据化运营这块的作用。</p>
+<h2 id="tisplus数据化场景-amp-现阶段成果"><a href="#tisplus数据化场景-amp-现阶段成果" class="headerlink" title="tisplus数据化场景&amp;现阶段成果"></a>tisplus数据化场景&amp;现阶段成果</h2><h3 id="数据大盘："><a href="#数据大盘：" class="headerlink" title="数据大盘："></a><strong>数据大盘</strong>：</h3><p>由原先的混合平铺tag改为单独入口，数据大盘包括内容有：服务总览、Ha3引擎监控指标、Ha3引擎分析指标、成本指标、sp监控指标、资源浪费情况等，是对业务全方位的重点数据展示，通过数据大盘，业务方可以轻松查看业务各个细节数据，时刻做到心中有“数”。其中慢查询相关的分析有慢查询特征分析，慢查询数变化趋势等。</p>
+<h3 id="一键诊断："><a href="#一键诊断：" class="headerlink" title="一键诊断："></a><strong>一键诊断</strong>：</h3><p>一键诊断的目的是让用户不需要理解系统复杂度的前提下仍然清楚的了解自己引擎的健康状态，做用户的智能诊断专家，因此我们推出健康分这一指标用于衡量引擎健康状态，用户通过健康分可以明确知道自己的服务健康质量如何。同时每一项都给出了诊断时间，配置不合理的简要描述以及详情，优化的收益，并给出子项的健康分以及优化的链接，诊断时间根据数据源的性质分为T+1的检测和实时的检测。</p>
+<ul>
+<li>诊断决策：诊断项事先需要定义好相应的规则，规则的获取来自实际的运维经验以及引擎的配置要求等，目前主要包括服务稳定性性检测，资源配置检测以及字段信息检测三大类共计九个小项的检测，将获取的信息经过规则判断，得到诊断分析的结果，同时为相应的诊断项赋予相应的权重和计算子项健康分，每一个诊断项根据其重要程度分为Not_important、important、Very_important三个等级；</li>
+<li>计算应用健康分：目前应用健康分计算较为简单有效，仅是将各个子项的健康分以及权重做线性加权得出。</li>
+</ul>
+<p>一键诊断的页面触发逻辑详见下图：</p>
+<p><img src="https://private-alipayobjects.alipay.com/alipay-rmsdeploy-image/skylark/png/d5030783-ce6d-4b2a-b68f-961cb0776a86.png" alt="一键诊断3.png | center | 704x390"></p>
+<p>目前一键诊断的产品形态如下图所示，当业务处于正常状态时诊断结果如下图所示：<br><img src="https://private-alipayobjects.alipay.com/alipay-rmsdeploy-image/skylark/png/27961e13-8d93-42d4-b095-96ba0e518272.png" alt="一键诊断1.png | center | 704x759"></p>
+<p><img src="https://private-alipayobjects.alipay.com/alipay-rmsdeploy-image/skylark/png/8fe6faba-915b-4b8e-b6f4-55a54db8211d.png" alt="一键诊断2.png | center | 704x501"></p>
+<p>当诊断结果显示应用有需要优化的问题时诊断结果如下图所示：<br><img src="https://private-alipayobjects.alipay.com/alipay-rmsdeploy-image/skylark/png/49df5c7a-8ba1-47d3-86bf-106faf1eb43c.png" alt="一键诊断4.png | center | 704x308"></p>
+<h3 id="成本趋势："><a href="#成本趋势：" class="headerlink" title="成本趋势："></a><strong>成本趋势</strong>：</h3><p>数据化运营最为关键的点在于如何去衡量数据化带给平台的价值。TISPLUS和成本系统打通之后，任何有价值的优化都得以在成本系统上体现，结合TISPLUS，我们在用户最常运维的页面加入成本趋势，用户可以看到自己服务的累计总成本与累计节省成本，不同时间段的成本对比，与成本相关的操作记录，让每一步的优化与成本下降有“据”可查，同时激励用户持续不断的优化引擎，达到效率和稳定性的一个平衡。</p>
+<h3 id="应用日报："><a href="#应用日报：" class="headerlink" title="应用日报："></a><strong>应用日报</strong>：</h3><p>平台做了许多数据化的feature，但是数据化的内容，少即是多，我们需要把最精简的，最核心的，最需要用户关心的数据透出，因此我们将这些数据化内容进行分类筛选，选出最核心的数据每天定时发给业务方。我们挑选了诸如成本信息、稳定性信息、诊断信息三部分最核心的信息作为邮件内容发送给业务负责人。</p>
+<p>经过上述这些场景的落地，基本形成数据大盘、一键诊断、成本趋势、应用日报这样一个有效的闭环，通过持续的优化线上系统，最终达到效率和稳定性的平衡。如果你对数据分析和引擎优化方面有心得，欢迎与我交流，也欢迎有才的你加入搜索事业部。</p>
+<p><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/d54adf49e120eff1c067bc9ca3ce81a6.png" alt="image.png"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hawkeye/" rel="tag"># Hawkeye</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/24/jvm-垃圾回收/" rel="next" title="jvm 垃圾回收">
+                <i class="fa fa-chevron-left"></i> jvm 垃圾回收
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/16/Hawkeye-TopN慢query的获取与优化/" rel="prev" title="Hawkeye:TopN慢query的获取与优化">
+                Hawkeye:TopN慢query的获取与优化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div class="ds-thread" data-thread-key="2018/03/16/Hawkeye-助力TISPLUS实现数据化运营/"
+           data-title="Hawkeye:助力TISPLUS实现数据化运营" data-url="http://yoursite.com/2018/03/16/Hawkeye-助力TISPLUS实现数据化运营/">
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/author.png"
+                alt="Li Xuefeng" />
+            
+              <p class="site-author-name" itemprop="name">Li Xuefeng</p>
+              <p class="site-description motion-element" itemprop="description">多读书，多实践</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/lixuefeng123" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:lixuefeng228503@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://yq.aliyun.com/teams/23?spm=a2c4e.11153959.0.0.17ae186fwCdSN9" title="阿里推荐与搜索博客" target="_blank">阿里推荐与搜索博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hawkeye简介"><span class="nav-number">2.</span> <span class="nav-text">hawkeye简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tisplus数据化场景-amp-现阶段成果"><span class="nav-number">3.</span> <span class="nav-text">tisplus数据化场景&现阶段成果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据大盘："><span class="nav-number">3.1.</span> <span class="nav-text">数据大盘：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一键诊断："><span class="nav-number">3.2.</span> <span class="nav-text">一键诊断：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#成本趋势："><span class="nav-number">3.3.</span> <span class="nav-text">成本趋势：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用日报："><span class="nav-number">3.4.</span> <span class="nav-text">应用日报：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li Xuefeng</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"your-duoshuo-shortname，待添加"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

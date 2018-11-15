@@ -8,8 +8,96 @@
     <atom:link href="/atom.xml" rel="self" type="application/rss+xml"/>
     
     <description>多读书，多实践</description>
-    <pubDate>Tue, 13 Nov 2018 12:07:20 GMT</pubDate>
+    <pubDate>Wed, 14 Nov 2018 11:52:10 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>Mac OS高效配置</title>
+      <link>http://yoursite.com/2018/11/14/Mac-OS%E9%AB%98%E6%95%88%E9%85%8D%E7%BD%AE/</link>
+      <guid>http://yoursite.com/2018/11/14/Mac-OS%E9%AB%98%E6%95%88%E9%85%8D%E7%BD%AE/</guid>
+      <pubDate>Wed, 14 Nov 2018 11:15:55 GMT</pubDate>
+      <description>
+      
+        &lt;h2 id=&quot;工具配置&quot;&gt;&lt;a href=&quot;#工具配置&quot; class=&quot;headerlink&quot; title=&quot;工具配置&quot;&gt;&lt;/a&gt;工具配置&lt;/h2&gt;&lt;p&gt;用了Mac接近两三年了，期间确实感觉到了Mac对于开发人员的重要性。这里记录下Mac&lt;br&gt;配置的一些有用链接，链接介绍的比
+      
+      </description>
+      
+      <content:encoded><![CDATA[<h2 id="工具配置"><a href="#工具配置" class="headerlink" title="工具配置"></a>工具配置</h2><p>用了Mac接近两三年了，期间确实感觉到了Mac对于开发人员的重要性。这里记录下Mac<br>配置的一些有用链接，链接介绍的比较全了，这里就不再照搬了，记录下方便自查。</p>
+<ul>
+<li><a href="http://dqy.me/2015/quick-use-mac.html" target="_blank" rel="external">用了Mac OS一年多的总结</a></li>
+<li><a href="http://wuchong.me/blog/2015/11/21/macbook-productive-tools" target="_blank" rel="external">高效Macbook开发之道(工具篇)</a></li>
+</ul>
+<p>以上两个链接是之前配置Mac的时候参考的链接，确实给我使用Mac带来了不少的便利，这里放在<br>这里方便自查。</p>
+<h2 id="开发工具"><a href="#开发工具" class="headerlink" title="开发工具"></a>开发工具</h2><h3 id="jenv"><a href="#jenv" class="headerlink" title="jenv"></a><a href="https://github.com/linux-china/jenv" target="_blank" rel="external">jenv</a></h3><ul>
+<li>install jenv </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ curl -L -s get.jenv.io | bash</div></pre></td></tr></table></figure>
+<p>安装成功之后installer会提示你新打开一个窗口或者restart。<br>由于版权问题，jenv无法分发Java SDK，所以我们需要下载Java相应的版本进行安装，安装完成之后需要使用如下命令将Java交由jenv进行管理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ mkdir -p $HOME/.jenv/candidates/java</div><div class="line">$ ln -s /Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/home $HOME/.jenv/candidates/java/1.7.0_45</div></pre></td></tr></table></figure>
+<ul>
+<li><p>安装其他的组件：</p>
+<ul>
+<li><p>浏览所有的组件： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ jenv all</div></pre></td></tr></table></figure>
+</li>
+<li><p>查看某个组件所有可以获得的版本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ jenv ls maven</div></pre></td></tr></table></figure>
+</li>
+<li><p>安装某个组件的特定版本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ jenv install maven 3.3.1</div><div class="line">``` </div><div class="line">* 列出所有安装的组件：</div><div class="line">```plain</div><div class="line">$ jenv ls</div></pre></td></tr></table></figure>
+</li>
+<li><p>更新组件库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ jenv repo update</div></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+]]></content:encoded>
+      
+      <comments>http://yoursite.com/2018/11/14/Mac-OS%E9%AB%98%E6%95%88%E9%85%8D%E7%BD%AE/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>Git常用命令汇总</title>
+      <link>http://yoursite.com/2018/11/14/Git%E5%B8%B8%E7%94%A8%E6%8A%80%E8%83%BD/</link>
+      <guid>http://yoursite.com/2018/11/14/Git%E5%B8%B8%E7%94%A8%E6%8A%80%E8%83%BD/</guid>
+      <pubDate>Wed, 14 Nov 2018 11:12:27 GMT</pubDate>
+      <description>
+      
+        &lt;p&gt;本文转载自&lt;a href=&quot;http://wuchong.me/blog/2015/03/30/git-useful-skills/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Git常用技能&lt;/a&gt;，供自己查阅使用。&lt;br&gt;Git小白教程，阅读&lt;a h
+      
+      </description>
+      
+      <content:encoded><![CDATA[<p>本文转载自<a href="http://wuchong.me/blog/2015/03/30/git-useful-skills/" target="_blank" rel="external">Git常用技能</a>，供自己查阅使用。<br>Git小白教程，阅读<a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000" target="_blank" rel="external">廖雪峰的Git教程</a></p>
+<h2 id="工作流"><a href="#工作流" class="headerlink" title="工作流"></a>工作流</h2><p>Git最核心的一个概念就是工作流。工作区(Workspace)是电脑中实际的目录；<br>暂存区(Index)像个缓存区域，临时保存你的改动；最后是版本库(Repository)，分为本地仓库和远程仓库。</p>
+<p><img src="http://ww4.sinaimg.cn/mw690/81b78497jw1eqnk1bkyaij20e40bpjsm.jpg" alt="工作流"></p>
+<h2 id="远程仓库"><a href="#远程仓库" class="headerlink" title="远程仓库"></a>远程仓库</h2><h3 id="添加远程仓库"><a href="#添加远程仓库" class="headerlink" title="添加远程仓库"></a>添加远程仓库</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git remote add origin git@server-name:path/repo-name.git  #添加一个远程库</div></pre></td></tr></table></figure>
+<h3 id="查看远程仓库"><a href="#查看远程仓库" class="headerlink" title="查看远程仓库"></a>查看远程仓库</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git remote      #要查看远程库的信息</div><div class="line">git remote -v   #显示更详细的信息</div></pre></td></tr></table></figure>
+<h3 id="推送分支"><a href="#推送分支" class="headerlink" title="推送分支"></a>推送分支</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push origin master    #推送到远程master分支</div></pre></td></tr></table></figure>
+<h3 id="抓取分支"><a href="#抓取分支" class="headerlink" title="抓取分支"></a>抓取分支</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">git clone git@server-name:path/repo-name.git   #克隆远程仓库到本地(能看到master分支)</div><div class="line">git checkout -b dev origin/dev  #创建远程origin的dev分支到本地，并命名为dev</div><div class="line">git checkout origin/dev --track #与上面效果一样</div><div class="line">git pull origin master          #从远程分支进行更新 </div><div class="line">git fetch origin master         #获取远程分支上的数据</div></pre></td></tr></table></figure>
+<h3 id="抓取GitHub上某个pull-request到本地"><a href="#抓取GitHub上某个pull-request到本地" class="headerlink" title="抓取GitHub上某个pull request到本地"></a>抓取GitHub上某个pull request到本地</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git fetch origin pull/ID/head:BRANCHNAME</div><div class="line">git checkout BRANCHNAME</div></pre></td></tr></table></figure>
+<p>$ git branch –set-upstream branch-name origin/branch-name，可以建立起本地分支和远程分支的关联，之后可以直接git pull从远程抓取分支。</p>
+<p>另外，git pull = git fetch + merge to local</p>
+<h3 id="删除远程分支"><a href="#删除远程分支" class="headerlink" title="删除远程分支"></a>删除远程分支</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ git push origin --delete bugfix</div><div class="line">To https://github.com/lixuefeng123</div><div class="line"> - [deleted]         bugfix</div><div class="line"># 或者直接push一个空分支</div><div class="line">$ git push origin :bugfix</div><div class="line">To https://github.com/lixuefeng123</div><div class="line"> - [deleted]         bugfix</div></pre></td></tr></table></figure>
+<h3 id="更新远程分支信息"><a href="#更新远程分支信息" class="headerlink" title="更新远程分支信息"></a>更新远程分支信息</h3><p>项目往前推进的过程中，远程仓库上经常会增加一些分支、删除一些分支。 所以有时需要与远程同步下分支信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git fetch -p</div></pre></td></tr></table></figure>
+<p>-p就是修剪的意思。它在fetch之后删除掉没有与远程分支对应的本地分支，并且同步一些远程新创建的分支和tag。</p>
+<h2 id="历史管理"><a href="#历史管理" class="headerlink" title="历史管理"></a>历史管理</h2><h3 id="查看历史"><a href="#查看历史" class="headerlink" title="查看历史"></a>查看历史</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git log --pretty=oneline filename #一行显示</div><div class="line">git log -p -2      #显示最近2次提交内容的差异</div><div class="line">git show cb926e7   #查看某次修改</div></pre></td></tr></table></figure>
+<h3 id="版本回退"><a href="#版本回退" class="headerlink" title="版本回退"></a>版本回退</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git reset --hard HEAD^    #回退到上一个版本</div><div class="line">git reset --hard cb926e7  #回退到具体某个版</div><div class="line">git reflog                #查看命令历史,常用于帮助找回丢失掉的commit</div></pre></td></tr></table></figure>
+<h2 id="管理修改"><a href="#管理修改" class="headerlink" title="管理修改"></a>管理修改</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git status              #查看工作区、暂存区的状态</div><div class="line">git checkout -- &lt;file&gt;  #丢弃工作区上某个文件的修改</div><div class="line">git reset HEAD &lt;file&gt;   #丢弃暂存区上某个文件的修改，重新放回工作区</div></pre></td></tr></table></figure>
+<h3 id="查看差异"><a href="#查看差异" class="headerlink" title="查看差异"></a>查看差异</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">git diff              #查看未暂存的文件更新 </div><div class="line">git diff --cached     #查看已暂存文件的更新 </div><div class="line">git diff HEAD -- readme.txt  #查看工作区和版本库里面最新版本的区别</div><div class="line">git diff &lt;source_branch&gt; &lt;target_branch&gt;  #在合并改动之前，预览两个分支的差异</div></pre></td></tr></table></figure>
+<p>使用Idea的客户端即可查看不同文件的修改。</p>
+<h3 id="删除文件"><a href="#删除文件" class="headerlink" title="删除文件"></a>删除文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git rm &lt;file&gt;           #直接删除文件</div><div class="line">git rm --cached &lt;file&gt;  #删除文件暂存状态</div></pre></td></tr></table></figure>
+<h3 id="储藏和恢复"><a href="#储藏和恢复" class="headerlink" title="储藏和恢复"></a>储藏和恢复</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">git stash           #储藏当前工作</div><div class="line">git stash list      #查看储藏的工作现场</div><div class="line">git stash apply     #恢复工作现场，stash内容并不删除</div><div class="line">git stash pop       #恢复工作现场，并删除stash内容</div></pre></td></tr></table></figure>
+<h2 id="分支管理"><a href="#分支管理" class="headerlink" title="分支管理"></a>分支管理</h2><h3 id="创建分支"><a href="#创建分支" class="headerlink" title="创建分支"></a>创建分支</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git branch develop              #只创建分支</div><div class="line">git checkout -b master develop  #创建并切换到 develop 分支</div></pre></td></tr></table></figure>
+<h3 id="合并分支"><a href="#合并分支" class="headerlink" title="合并分支"></a>合并分支</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git checkout master         #切换到主分支</div><div class="line">git merge --no-ff develop   #把 develop 合并到 master 分支，no-ff 选项的作用是保留原分支记录</div><div class="line">git branch -d develop       #删除 develop 分支</div></pre></td></tr></table></figure>
+<h2 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h2><h3 id="显示标签"><a href="#显示标签" class="headerlink" title="显示标签"></a>显示标签</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git tag         #列出现有标签 </div><div class="line">git show &lt;tagname&gt;  #显示标签信息</div></pre></td></tr></table></figure>
+<h3 id="创建标签"><a href="#创建标签" class="headerlink" title="创建标签"></a>创建标签</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git tag v0.1    #新建标签，默认位 HEAD</div><div class="line">git tag v0.1 cb926e7  #对指定的 commit id 打标签</div><div class="line">git tag -a v0.1 -m &apos;version 0.1 released&apos;   #新建带注释标签</div></pre></td></tr></table></figure>
+<h3 id="操作标签"><a href="#操作标签" class="headerlink" title="操作标签"></a>操作标签</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">git checkout &lt;tagname&gt;        #切换到标签</div><div class="line">git push origin &lt;tagname&gt;     #推送分支到源上</div><div class="line">git push origin --tags        #一次性推送全部尚未推送到远程的本地标签</div><div class="line">git tag -d &lt;tagname&gt;          #删除标签</div><div class="line">git push origin :refs/tags/&lt;tagname&gt;      #删除远程标签</div></pre></td></tr></table></figure>
+<h2 id="Git-设置"><a href="#Git-设置" class="headerlink" title="Git 设置"></a>Git 设置</h2><p>设置commit的用户和邮箱</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">git config user.name &quot;xx&quot;               #设置 commit 的用户</div><div class="line">git config user.email &quot;xx@xx.com&quot;       #设置 commit 的邮箱</div><div class="line">git commit --amend --author &quot;Li Xuefeng &lt;lixuefeng228503@gmail.com&gt;&quot;    #修改上次提交的用户信息</div><div class="line">git config format.pretty oneline        #显示历史记录时，每个提交的信息只显示一行</div></pre></td></tr></table></figure>]]></content:encoded>
+      
+      <comments>http://yoursite.com/2018/11/14/Git%E5%B8%B8%E7%94%A8%E6%8A%80%E8%83%BD/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>Hexo使用</title>
@@ -34,6 +122,96 @@
 ]]></content:encoded>
       
       <comments>http://yoursite.com/2018/11/13/hello-world/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>Hawkeye:TopN慢query的获取与优化</title>
+      <link>http://yoursite.com/2018/03/16/Hawkeye-TopN%E6%85%A2query%E7%9A%84%E8%8E%B7%E5%8F%96%E4%B8%8E%E4%BC%98%E5%8C%96/</link>
+      <guid>http://yoursite.com/2018/03/16/Hawkeye-TopN%E6%85%A2query%E7%9A%84%E8%8E%B7%E5%8F%96%E4%B8%8E%E4%BC%98%E5%8C%96/</guid>
+      <pubDate>Fri, 16 Mar 2018 07:10:45 GMT</pubDate>
+      <description>
+      
+        &lt;p&gt;Hawkeye的底层分析系统基于Blink进行大数据分析，前段时间在优化慢query查询的过程中开发了应用TopN慢query获取的分析任务，其中用到的分析方法适用于其他类似求TopN的问题中。本文的TopN问题属于批处理范畴。&lt;/p&gt;
+&lt;h2 id=&quot;一、背景&quot;&gt;&lt;a h
+      
+      </description>
+      
+      <content:encoded><![CDATA[<p>Hawkeye的底层分析系统基于Blink进行大数据分析，前段时间在优化慢query查询的过程中开发了应用TopN慢query获取的分析任务，其中用到的分析方法适用于其他类似求TopN的问题中。本文的TopN问题属于批处理范畴。</p>
+<h2 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h2><p>经过hawkeye之前的慢query分析，每个应用不同程度的存在慢query,大量的慢query大大影响了引擎的性能，也会带来机器资源的浪费。为了优化Ha3的查询性能，我们将分析更深入了一步，分为如下三部分进行慢query的优化。</p>
+<ul>
+<li>应用TopN慢query的获取：获取top50的慢query，并分析出查询各阶段耗时占比；</li>
+<li>各阶段耗时优化&amp;验证：几种常见的优化手段，这些优化手段均是通过验证有效的方法；</li>
+<li>优化收益评估：经过优化带来的价值主要体现在慢查询数的减少和容量预估的增加。</li>
+</ul>
+<h2 id="二、TopN慢查询获取流程"><a href="#二、TopN慢查询获取流程" class="headerlink" title="二、TopN慢查询获取流程"></a>二、TopN慢查询获取流程</h2><p>慢query数据来自应用的访问日志，query数量和应用的访问量有关，通常在千万甚至亿级别。从海量日志中获取TopN慢query属于大数据分析范畴。我们借助Blink的大数据分析能力，采用分治+hash+小顶堆的方式进行获取，即先将query格式进行解析，获取其查询时间，将解析后的k-v数据取md5值，然后根据md5值做分片，在每一个分片中计算TopN慢query，最后在所有的TopN中求出最终的TopN。下面图示为慢query任务的处理过程。</p>
+<p><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/4088b2fc0d7362fd719e6a51b203c684.png" alt="image.png"></p>
+<p>定时任务每天执行一次，将应用昨天的AccessLog按照上述流程处理一遍，从而获取应用的Top50慢query，从获取的top50慢query可以分析出一些应用访问不合理的地方，虽然不能完全代表高频慢query，但对于Top级的query优化也可以持续的对应用进行优化，提高查询性能，节约机器资源。</p>
+<h2 id="三、慢query的优化手段"><a href="#三、慢query的优化手段" class="headerlink" title="三、慢query的优化手段"></a>三、慢query的优化手段</h2><p>按照平台用户易优化的原则，根据分析的结论数据提供了四种不同的query优化手段，按照阶段分为：</p>
+<h4 id="粗排阶段三种："><a href="#粗排阶段三种：" class="headerlink" title="粗排阶段三种："></a>粗排阶段三种：</h4><ul>
+<li>rank_size数过大，建议减少rank_size数量，可能会影响效果，需业务方评估；</li>
+<li>rank_size数量合理，但粗排阶段耗时占比超过50%，检查海选插件的性能；</li>
+<li>正排过滤改为倒排召回，对于特定场景有很大作用，第四部分会讲到具体case；</li>
+</ul>
+<h4 id="精排阶段一种："><a href="#精排阶段一种：" class="headerlink" title="精排阶段一种："></a>精排阶段一种：</h4><ul>
+<li>战马耗时占比超过50%，建议检查战马相关插件的性能。</li>
+</ul>
+<p>目前的优化手段在tisplus2平台上进行透出，点击优化可以看到诊断具体慢query的优化建议，如果上述四条建议条件均不满足，则需要联系平台管理员具体诊断下慢的原因了。</p>
+<h2 id="四、优化的收益"><a href="#四、优化的收益" class="headerlink" title="四、优化的收益"></a>四、优化的收益</h2><p>第四部分介绍下采用上述优化带来的效果，某应用采用正排过滤改为倒排召回的优化，采用此优化的前提是：1.swift消息无update消息；2.对应字段是可枚举类型；3.非子doc并且seek数远大于match数。采用此优化之后，慢query数直线下降，由百万级别降到0，且容量预估提升了8倍（即相同资源可抗的访问量上涨了8倍）。</p>
+<h2 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h2><p>目前慢query的优化功能已上线，用户可以自行查看应用的访问状况和访问较慢的query，并针对性的进行分析和初步的优化，相比较之前是一个从无到有的过程。但是目前的慢query分析还有很多可以优化的地方，比如优化建议的丰富、慢query的自动优化以及实时慢query的分析等，目前的慢query分析已经能起到一定的问题诊断和优化的作用了，未来还需要持续的挖掘和深入。如果你对数据分析和引擎优化方面有心得，欢迎与我交流，也欢迎有才的你加入搜索事业部。</p>
+<p><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/d54adf49e120eff1c067bc9ca3ce81a6.png" alt="image.png"></p>
+]]></content:encoded>
+      
+      <comments>http://yoursite.com/2018/03/16/Hawkeye-TopN%E6%85%A2query%E7%9A%84%E8%8E%B7%E5%8F%96%E4%B8%8E%E4%BC%98%E5%8C%96/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>Hawkeye:助力TISPLUS实现数据化运营</title>
+      <link>http://yoursite.com/2018/03/16/Hawkeye-%E5%8A%A9%E5%8A%9BTISPLUS%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E5%8C%96%E8%BF%90%E8%90%A5/</link>
+      <guid>http://yoursite.com/2018/03/16/Hawkeye-%E5%8A%A9%E5%8A%9BTISPLUS%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E5%8C%96%E8%BF%90%E8%90%A5/</guid>
+      <pubDate>Fri, 16 Mar 2018 06:57:12 GMT</pubDate>
+      <description>
+      
+        &lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;p&gt;阅读本文的同时，建议大家先阅读洪震的文章《&lt;a href=&quot;https://yq.aliyun.com/articles/402309?sp
+      
+      </description>
+      
+      <content:encoded><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>阅读本文的同时，建议大家先阅读洪震的文章《<a href="https://yq.aliyun.com/articles/402309?spm=a2c4e.11153959.0.0.742f6aa6k97cfp" target="_blank" rel="external">阿里集团搜索中台TisPlus</a>》。TISPLUS平台的数据分析能力主要由hawkeye提供，但是之前存在如下几个问题：1.数据化场景的功能没有凸显，隐藏较深；2.产品形态设计单一，没有一个较好的产品闭环引导用户关注数据化的结果；3.数据分析内容简单，覆盖面不足，远远达不到让用户数据化运营服务的目标；4.重点关注了数据分析的结果，但缺少衡量数据分析结果为搜索服务本身带来的价值大小。我们深知数据必须和业务、平台本身做深度结合才能产生其核心价值，为了助力TISPLUS平台数据化能力建设，更好的发挥hawjeye的作用，我们项目小组进行了诸如数据化需求调研分析、产品视觉稿设计、hawkeye平台拆分、在TISPLUS平台落地数据化等一系列工作。</p>
+<h2 id="hawkeye简介"><a href="#hawkeye简介" class="headerlink" title="hawkeye简介"></a>hawkeye简介</h2><p>hawkeye是一个数据分析产品，定位于协助维护及优化线上系统，包括但不限于ha3、sp、igraph等引擎，目前主要基于tisplus平台，进行ha3引擎的数据分析以及引擎优化，诸如慢查询、引擎schema合理性、服务稳定性、资源配置合理性的检测及优化等。</p>
+<blockquote>
+<p>系统简介</p>
+</blockquote>
+<p><img src="https://private-alipayobjects.alipay.com/alipay-rmsdeploy-image/skylark/png/bcb48fa6-6a23-43bc-8d6f-e42f1d9395e3.png" alt="hawkeye平台.png | center | 704x479"></p>
+<p>1.hawkeye平台经过拆分后大体分为三部分</p>
+<ul>
+<li>hawkeye-blink：基于Blink完成数据处理的工作，重点是访问日志分析、全量数据分析等，该工程侧重底层的数据分析，借助Blink强大的数据处理能力，每天对于TISPLUS平台所有Ha3应用的访问日志以及全量数据进行分析，工程处理流程图如下：</li>
+</ul>
+<p><img src="https://private-alipayobjects.alipay.com/alipay-rmsdeploy-image/skylark/png/95244682-77a6-42bc-85e1-86210551bdd6.png" alt="Blink工程数据处理流程图.png | center | 704x288"></p>
+<ul>
+<li>hawkeye-experience：基于hawkeye-blink的分析结果进行更加贴近用户的分析，比如字段信息监测，包括字段类型合理性，字段值单调性监测等，除此之外还包括但不限于kmon无效报警、冒烟case录入情况、引擎降级配置、内存相关配置、推荐行列数配置以及切换时最小服务行比例等检测，hawkeye-experience工程的定位是做一个引擎诊断规则中台，将平时运维人员优化维护引擎的宝贵经验沉淀到系统中来，让每一个新接入的应用可以快速享受这样的宝贵经验，而不是通过一次次的踩坑之后获得，让每位用户拥有一个类似智能诊断专家的角色来优化自己的引擎是我们的目标，也是我们持续奋斗的动力,其中hawkeye-experience的数据处理流程图如下所示：</li>
+</ul>
+<p><img src="https://private-alipayobjects.alipay.com/alipay-rmsdeploy-image/skylark/png/bd4bc31d-018c-4519-bc31-cf58936e55c0.png" alt="hawkeye-experience.png | center | 704x623"></p>
+<ul>
+<li>hawkeye-console：web层，提供hawkeye分析结果的各种api以及可视化的监控图表输出。</li>
+</ul>
+<p>2.TISPLUS-Ha3平台：搜索引擎服务平台，目前接入了商品中心IC、聚划算、村淘、盒马、评价、优酷、咸鱼、飞猪、lazada等重要业务；<br>3.TISPLUS-sp平台：sp+ha3组成一个完成的引擎服务；<br>4.airflow/matt：搜索调度平台(后更名为matt)，hawkeye有约上百个分析任务，有些是脚本式任务，有些需要上传资源文件，诸如java jar，bash script等，每天有定时触发以及手动触发等多种类型，airflow/matt很好的支持了hawkeye的任务调度；<br>5.容量评估平台：刚上线的应用如何申请资源？有点懵，别上火，容量评估告诉你,容量评估数据的得出，得益于heracles（压测平台）支持大促压测、日常化压测以及容量评估。<br>6.成本平台：数据分析结果为搜索服务带来的价值几何？成本平台衔接数据化运营及其价值，服务优化带来的价值清晰可见；<br>7.sophon：智能化运维平台，目前主要从sophon获取应用关于引擎的一些配置信息，后续将和智能化运维结合，更好的发挥hawkeye在数据化运营这块的作用。</p>
+<h2 id="tisplus数据化场景-amp-现阶段成果"><a href="#tisplus数据化场景-amp-现阶段成果" class="headerlink" title="tisplus数据化场景&amp;现阶段成果"></a>tisplus数据化场景&amp;现阶段成果</h2><h3 id="数据大盘："><a href="#数据大盘：" class="headerlink" title="数据大盘："></a><strong>数据大盘</strong>：</h3><p>由原先的混合平铺tag改为单独入口，数据大盘包括内容有：服务总览、Ha3引擎监控指标、Ha3引擎分析指标、成本指标、sp监控指标、资源浪费情况等，是对业务全方位的重点数据展示，通过数据大盘，业务方可以轻松查看业务各个细节数据，时刻做到心中有“数”。其中慢查询相关的分析有慢查询特征分析，慢查询数变化趋势等。</p>
+<h3 id="一键诊断："><a href="#一键诊断：" class="headerlink" title="一键诊断："></a><strong>一键诊断</strong>：</h3><p>一键诊断的目的是让用户不需要理解系统复杂度的前提下仍然清楚的了解自己引擎的健康状态，做用户的智能诊断专家，因此我们推出健康分这一指标用于衡量引擎健康状态，用户通过健康分可以明确知道自己的服务健康质量如何。同时每一项都给出了诊断时间，配置不合理的简要描述以及详情，优化的收益，并给出子项的健康分以及优化的链接，诊断时间根据数据源的性质分为T+1的检测和实时的检测。</p>
+<ul>
+<li>诊断决策：诊断项事先需要定义好相应的规则，规则的获取来自实际的运维经验以及引擎的配置要求等，目前主要包括服务稳定性性检测，资源配置检测以及字段信息检测三大类共计九个小项的检测，将获取的信息经过规则判断，得到诊断分析的结果，同时为相应的诊断项赋予相应的权重和计算子项健康分，每一个诊断项根据其重要程度分为Not_important、important、Very_important三个等级；</li>
+<li>计算应用健康分：目前应用健康分计算较为简单有效，仅是将各个子项的健康分以及权重做线性加权得出。</li>
+</ul>
+<p>一键诊断的页面触发逻辑详见下图：</p>
+<p><img src="https://private-alipayobjects.alipay.com/alipay-rmsdeploy-image/skylark/png/d5030783-ce6d-4b2a-b68f-961cb0776a86.png" alt="一键诊断3.png | center | 704x390"></p>
+<p>目前一键诊断的产品形态如下图所示，当业务处于正常状态时诊断结果如下图所示：<br><img src="https://private-alipayobjects.alipay.com/alipay-rmsdeploy-image/skylark/png/27961e13-8d93-42d4-b095-96ba0e518272.png" alt="一键诊断1.png | center | 704x759"></p>
+<p><img src="https://private-alipayobjects.alipay.com/alipay-rmsdeploy-image/skylark/png/8fe6faba-915b-4b8e-b6f4-55a54db8211d.png" alt="一键诊断2.png | center | 704x501"></p>
+<p>当诊断结果显示应用有需要优化的问题时诊断结果如下图所示：<br><img src="https://private-alipayobjects.alipay.com/alipay-rmsdeploy-image/skylark/png/49df5c7a-8ba1-47d3-86bf-106faf1eb43c.png" alt="一键诊断4.png | center | 704x308"></p>
+<h3 id="成本趋势："><a href="#成本趋势：" class="headerlink" title="成本趋势："></a><strong>成本趋势</strong>：</h3><p>数据化运营最为关键的点在于如何去衡量数据化带给平台的价值。TISPLUS和成本系统打通之后，任何有价值的优化都得以在成本系统上体现，结合TISPLUS，我们在用户最常运维的页面加入成本趋势，用户可以看到自己服务的累计总成本与累计节省成本，不同时间段的成本对比，与成本相关的操作记录，让每一步的优化与成本下降有“据”可查，同时激励用户持续不断的优化引擎，达到效率和稳定性的一个平衡。</p>
+<h3 id="应用日报："><a href="#应用日报：" class="headerlink" title="应用日报："></a><strong>应用日报</strong>：</h3><p>平台做了许多数据化的feature，但是数据化的内容，少即是多，我们需要把最精简的，最核心的，最需要用户关心的数据透出，因此我们将这些数据化内容进行分类筛选，选出最核心的数据每天定时发给业务方。我们挑选了诸如成本信息、稳定性信息、诊断信息三部分最核心的信息作为邮件内容发送给业务负责人。</p>
+<p>经过上述这些场景的落地，基本形成数据大盘、一键诊断、成本趋势、应用日报这样一个有效的闭环，通过持续的优化线上系统，最终达到效率和稳定性的平衡。如果你对数据分析和引擎优化方面有心得，欢迎与我交流，也欢迎有才的你加入搜索事业部。</p>
+<p><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/d54adf49e120eff1c067bc9ca3ce81a6.png" alt="image.png"></p>
+]]></content:encoded>
+      
+      <comments>http://yoursite.com/2018/03/16/Hawkeye-%E5%8A%A9%E5%8A%9BTISPLUS%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E5%8C%96%E8%BF%90%E8%90%A5/#disqus_thread</comments>
     </item>
     
     <item>
@@ -620,18 +798,6 @@
     </item>
     
     <item>
-      <title>vue.js以及highcharts.js的深入学习(待补充)</title>
-      <link>http://yoursite.com/2017/03/16/vue-js%E4%BB%A5%E5%8F%8Ahighcharts-js%E7%9A%84%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0/</link>
-      <guid>http://yoursite.com/2017/03/16/vue-js%E4%BB%A5%E5%8F%8Ahighcharts-js%E7%9A%84%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0/</guid>
-      <pubDate>Thu, 16 Mar 2017 03:59:10 GMT</pubDate>
-      <description>
-      
-      </description>
-      
-      <comments>http://yoursite.com/2017/03/16/vue-js%E4%BB%A5%E5%8F%8Ahighcharts-js%E7%9A%84%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0/#disqus_thread</comments>
-    </item>
-    
-    <item>
       <title>Sun的jdk命令行工具</title>
       <link>http://yoursite.com/2017/03/16/jvm%E7%9A%84jdk%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7/</link>
       <guid>http://yoursite.com/2017/03/16/jvm%E7%9A%84jdk%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7/</guid>
@@ -748,18 +914,6 @@
 <h3 id="第五章、基础构建模块"><a href="#第五章、基础构建模块" class="headerlink" title="第五章、基础构建模块"></a>第五章、基础构建模块</h3>]]></content:encoded>
       
       <comments>http://yoursite.com/2017/03/16/java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%BD%93%E7%B3%BB/#disqus_thread</comments>
-    </item>
-    
-    <item>
-      <title>使用Tensorflow实现CNN图像识别</title>
-      <link>http://yoursite.com/2017/03/16/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%89%AB%E7%9B%B2/</link>
-      <guid>http://yoursite.com/2017/03/16/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%89%AB%E7%9B%B2/</guid>
-      <pubDate>Thu, 16 Mar 2017 03:50:29 GMT</pubDate>
-      <description>
-      
-      </description>
-      
-      <comments>http://yoursite.com/2017/03/16/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%89%AB%E7%9B%B2/#disqus_thread</comments>
     </item>
     
   </channel>

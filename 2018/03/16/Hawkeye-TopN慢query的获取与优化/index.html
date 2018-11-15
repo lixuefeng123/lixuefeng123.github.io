@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="GC,G1," />
+  <meta name="keywords" content="Hawkeye," />
 
 
 
@@ -81,19 +81,22 @@
 
 
 
-<meta name="description" content="写这篇文章的目的在于一个读书之后的提炼，读完《深入理解java虚拟机》这本书之后深感需要提炼下关键的知识点，这样针对具体的问题记忆会更加深刻。接下来我将以问题对话的形式记录jvm-垃圾回收的相关知识点。先附上原文的一个链接link
-问：1.地球人都知道，Java有个东西叫垃圾收集器，他让创建的对象不需要像c/cpp那样delete或者free掉，你能不能谈谈,GC是在什么时候，对什么东西，做了">
+<meta name="description" content="Hawkeye的底层分析系统基于Blink进行大数据分析，前段时间在优化慢query查询的过程中开发了应用TopN慢query获取的分析任务，其中用到的分析方法适用于其他类似求TopN的问题中。本文的TopN问题属于批处理范畴。
+一、背景经过hawkeye之前的慢query分析，每个应用不同程度的存在慢query,大量的慢query大大影响了引擎的性能，也会带来机器资源的浪费。为了优化Ha3的查询">
 <meta property="og:type" content="article">
-<meta property="og:title" content="jvm 垃圾回收">
-<meta property="og:url" content="http://yoursite.com/2017/06/24/jvm-垃圾回收/index.html">
+<meta property="og:title" content="Hawkeye:TopN慢query的获取与优化">
+<meta property="og:url" content="http://yoursite.com/2018/03/16/Hawkeye-TopN慢query的获取与优化/index.html">
 <meta property="og:site_name" content="Li Xuefeng's Blog">
-<meta property="og:description" content="写这篇文章的目的在于一个读书之后的提炼，读完《深入理解java虚拟机》这本书之后深感需要提炼下关键的知识点，这样针对具体的问题记忆会更加深刻。接下来我将以问题对话的形式记录jvm-垃圾回收的相关知识点。先附上原文的一个链接link
-问：1.地球人都知道，Java有个东西叫垃圾收集器，他让创建的对象不需要像c/cpp那样delete或者free掉，你能不能谈谈,GC是在什么时候，对什么东西，做了">
-<meta property="og:updated_time" content="2018-11-13T12:05:26.000Z">
+<meta property="og:description" content="Hawkeye的底层分析系统基于Blink进行大数据分析，前段时间在优化慢query查询的过程中开发了应用TopN慢query获取的分析任务，其中用到的分析方法适用于其他类似求TopN的问题中。本文的TopN问题属于批处理范畴。
+一、背景经过hawkeye之前的慢query分析，每个应用不同程度的存在慢query,大量的慢query大大影响了引擎的性能，也会带来机器资源的浪费。为了优化Ha3的查询">
+<meta property="og:image" content="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/4088b2fc0d7362fd719e6a51b203c684.png">
+<meta property="og:image" content="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/d54adf49e120eff1c067bc9ca3ce81a6.png">
+<meta property="og:updated_time" content="2018-11-14T12:02:22.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="jvm 垃圾回收">
-<meta name="twitter:description" content="写这篇文章的目的在于一个读书之后的提炼，读完《深入理解java虚拟机》这本书之后深感需要提炼下关键的知识点，这样针对具体的问题记忆会更加深刻。接下来我将以问题对话的形式记录jvm-垃圾回收的相关知识点。先附上原文的一个链接link
-问：1.地球人都知道，Java有个东西叫垃圾收集器，他让创建的对象不需要像c/cpp那样delete或者free掉，你能不能谈谈,GC是在什么时候，对什么东西，做了">
+<meta name="twitter:title" content="Hawkeye:TopN慢query的获取与优化">
+<meta name="twitter:description" content="Hawkeye的底层分析系统基于Blink进行大数据分析，前段时间在优化慢query查询的过程中开发了应用TopN慢query获取的分析任务，其中用到的分析方法适用于其他类似求TopN的问题中。本文的TopN问题属于批处理范畴。
+一、背景经过hawkeye之前的慢query分析，每个应用不同程度的存在慢query,大量的慢query大大影响了引擎的性能，也会带来机器资源的浪费。为了优化Ha3的查询">
+<meta name="twitter:image" content="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/4088b2fc0d7362fd719e6a51b203c684.png">
 
 
 
@@ -123,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/06/24/jvm-垃圾回收/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/03/16/Hawkeye-TopN慢query的获取与优化/"/>
 
 
 
 
 
-  <title>jvm 垃圾回收 | Li Xuefeng's Blog</title>
+  <title>Hawkeye:TopN慢query的获取与优化 | Li Xuefeng's Blog</title>
   
 
 
@@ -266,7 +269,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/24/jvm-垃圾回收/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/16/Hawkeye-TopN慢query的获取与优化/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Li Xuefeng">
@@ -283,7 +286,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">jvm 垃圾回收</h1>
+          <h1 class="post-title" itemprop="name headline">Hawkeye:TopN慢query的获取与优化</h1>
         
 
         <div class="post-meta">
@@ -295,8 +298,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-24T17:57:59+08:00">
-                2017-06-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-16T15:10:45+08:00">
+                2018-03-16
               </time>
             
 
@@ -318,8 +321,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/编程语言/" itemprop="url" rel="index">
-                    <span itemprop="name">编程语言</span>
+                  <a href="/categories/智能运维/" itemprop="url" rel="index">
+                    <span itemprop="name">智能运维</span>
                   </a>
                 </span>
 
@@ -336,8 +339,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/06/24/jvm-垃圾回收/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/24/jvm-垃圾回收/" itemprop="commentCount"></span>
+                <a href="/2018/03/16/Hawkeye-TopN慢query的获取与优化/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/03/16/Hawkeye-TopN慢query的获取与优化/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -365,40 +368,29 @@
       
 
       
-        <p>写这篇文章的目的在于一个读书之后的提炼，读完《深入理解java虚拟机》这本书之后深感需要提炼下关键的知识点，这样针对具体的问题记忆会更加深刻。接下来我将以问题对话的形式记录jvm-垃圾回收的相关知识点。<br>先附上原文的一个链接<a href="http://icyfenix.iteye.com/blog/715301" target="_blank" rel="external">link</a></p>
-<p>问：1.地球人都知道，Java有个东西叫垃圾收集器，他让创建的对象不需要像c/cpp那样delete或者free掉，你能不能谈谈,GC是在什么时候，对什么东西，做了什么事情？</p>
-<p>答：首先是什么时候，回答这个问题需要介绍下HotSpot JVM对于堆的划分，它将堆划分为Young区和Old区，Young区分为Eden区和survivor1和survivor2三部分。其中GC又分为minor GC（新生代）和full GC（年老代）,其中minor GC发生的条件是Eden区满了的时候，大多数的Java对象具有朝生夕灭的特性，所以Minor GC非常频繁，一般回收速度也比较快。老年代GC（也叫Full GC），指发生在老年代的GC，当升到老年代的对象大于老年代的剩余空间时触发Full GC,其中GC时间与非GC时间耗时比例超GCTIMERATE的限制会触发OOM。</p>
-<p>对什么东西：对从GC root搜索找不到的对象，而且经过第一次标记、清理之后仍然没有复活的对象进行回收。</p>
-<p>做了什么事情:能说出诸如新生代做的是复制清理、from survivor、to survivor是干啥用的、老年代做的是标记清理、标记清理后碎片需要整理、复制清理和标记清理有有什么优劣势等。</p>
-<p>复制清理：将内存容量划分为大小相等的两块，每次只使用其中一块，然后用完再将存活的对象复制到另一块，将原先的内存块清理掉，实现简单并且运行高效。只是这种算法的代价是将内存缩小为原来的一半，有点高了。v<br>标记清理：复制清理在对象存活率较高时就要进行较多的复制操作，效率将会变低。更关键的是如果不想浪费50%的空间，就需要有额外的空间进行分配担保，以应对被使用的内存中所有的对象都100%存活的极端情况。所以老年代一般不采用这种算法。标记清理的标记过程和“标记-清除”算法一样，但后续的步骤不是直接对可回收对象进行清理，而是让所有存活的对象都向一端移动，然后直接清理掉端边界以外的内存。</p>
-<p>问：2.Java和C++在内存分配和管理上有什么区别？</p>
-<p>答：Java与C++之间有一堵由动态内存分配和垃圾收集技术所围成的高墙，墙外面的人想进去，墙里面的人想出来。  对于从事C和C++程序开发的开发人员来说，在内存管理领域，他们既是拥有最高权利的皇帝，也是从事最基础工作的劳动人民—–既拥有每一个对象的所有权，又担负着每一个对象从生命开始到终结的维护责任。 对于Java程序员来说，虚拟机的自动内存分配机制的帮助下，不再需要为每一个new操作去写配对的delete/free代码，而且不容易出现内存泄露和内存溢出问题，看起来由虚拟机管理内存一切都很美好。不过，也正是因为Java程序员把内存控制的权利交给Java虚拟机，一旦出现内存泄露和溢出方面的问题，如果不了解虚拟机是怎样使用内存的，那排查错误将会是一项异常艰难的工作。并且好的Java程序在编写的时候肯定要考虑GC的问题，怎样定义static对象，怎样new对象效率更高等等问题，简称面向GC的编程也可以说Java的内存分配管理是一种托管的方式，托管于JVM。C++经过编译时直接编译成机器码，而Java是编译成字节码，由JVM解释执行。C++是编译型语言，而Java兼具编译型和解释型语言的特点。</p>
-<p>问：3.java虚拟机规范将JVM虚拟机所管理的内存分为几部分？</p>
-<p>答：</p>
+        <p>Hawkeye的底层分析系统基于Blink进行大数据分析，前段时间在优化慢query查询的过程中开发了应用TopN慢query获取的分析任务，其中用到的分析方法适用于其他类似求TopN的问题中。本文的TopN问题属于批处理范畴。</p>
+<h2 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h2><p>经过hawkeye之前的慢query分析，每个应用不同程度的存在慢query,大量的慢query大大影响了引擎的性能，也会带来机器资源的浪费。为了优化Ha3的查询性能，我们将分析更深入了一步，分为如下三部分进行慢query的优化。</p>
 <ul>
-<li>程序计数器：是一块较小的内存空间，它的作用可以看做是当前线程所执行字节码的行号指示器，属于线程私有，和线程的生命周期相同。</li>
-<li>Java虚拟机栈：线程私有，生命周期和线程相同。Java虚拟机栈描述的是Java方法（区别于native的本地方法）执行的内存模型，每个方法被执行的时候会同时创建一个栈帧用于存储局部变量表、操作栈、动作链接、方法出口等信息。每个方法被调用直到执行完成的过程，都对应着一个栈帧在虚拟机栈中入栈和出栈的过程。</li>
-<li>本地方法栈：与虚拟机栈所发挥的作用是非常相似的，其区别不过是虚拟机栈为虚拟机执行Java方法(也就是字节码)服务，而本地方法栈则为虚拟机所使用到的Native方法服务。</li>
-<li>方法区：用于存储已被虚拟机加载的类信息、常量、静态变量等，被所有的线程所共享。</li>
-<li>java堆：被所有的线程所共享，所有的对象实例以及数组都要在堆上分配，class对象也在这里。</li>
+<li>应用TopN慢query的获取：获取top50的慢query，并分析出查询各阶段耗时占比；</li>
+<li>各阶段耗时优化&amp;验证：几种常见的优化手段，这些优化手段均是通过验证有效的方法；</li>
+<li>优化收益评估：经过优化带来的价值主要体现在慢查询数的减少和容量预估的增加。</li>
 </ul>
-<p>问：4.有哪些方法可以判断一个对象已经可以被回收，JVM怎么判断一个对象已经消亡可以被回收？</p>
-<p>答：</p>
-<p>1.引用计数算法：给对象中添加一个引用计数器，每当有一个地方引用它时，计数器就加1；当引用失效时，计数器值就减1；任何时刻计数器都为0的对象就是不可能再被使用的。         Java语言没有选用引用计数法来管理内存，因为引用计数法不能很好的解决循环引用的问题。<br>2.根搜索算法：在主流的商用语言中，都是使用根搜索算法来判定对象是否存活的。GC Root Tracing 算法思路就是通过一系列的名为”GC  Roots”的对象作为起始点，从这些节点开始向下搜索，搜索所走过的路径称为引用链（Reference Chain），当一个对象到GC Roots没有任何引用链相连，即从GC Roots到这个对象不可达，则证明此对象是不可用的。</p>
-<p>问：5.那些对象可以作为GC Roots？</p>
-<p>答：</p>
-<ul>
-<li>虚拟机栈（栈帧中的本地变量表）中的引用的对象</li>
-<li>方法区中的类静态属性引用的对象</li>
-<li>方法区中的常量引用的对象</li>
-<li>本地方法栈中JNI（Native方法）的引用对象</li>
+<h2 id="二、TopN慢查询获取流程"><a href="#二、TopN慢查询获取流程" class="headerlink" title="二、TopN慢查询获取流程"></a>二、TopN慢查询获取流程</h2><p>慢query数据来自应用的访问日志，query数量和应用的访问量有关，通常在千万甚至亿级别。从海量日志中获取TopN慢query属于大数据分析范畴。我们借助Blink的大数据分析能力，采用分治+hash+小顶堆的方式进行获取，即先将query格式进行解析，获取其查询时间，将解析后的k-v数据取md5值，然后根据md5值做分片，在每一个分片中计算TopN慢query，最后在所有的TopN中求出最终的TopN。下面图示为慢query任务的处理过程。</p>
+<p><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/4088b2fc0d7362fd719e6a51b203c684.png" alt="image.png"></p>
+<p>定时任务每天执行一次，将应用昨天的AccessLog按照上述流程处理一遍，从而获取应用的Top50慢query，从获取的top50慢query可以分析出一些应用访问不合理的地方，虽然不能完全代表高频慢query，但对于Top级的query优化也可以持续的对应用进行优化，提高查询性能，节约机器资源。</p>
+<h2 id="三、慢query的优化手段"><a href="#三、慢query的优化手段" class="headerlink" title="三、慢query的优化手段"></a>三、慢query的优化手段</h2><p>按照平台用户易优化的原则，根据分析的结论数据提供了四种不同的query优化手段，按照阶段分为：</p>
+<h4 id="粗排阶段三种："><a href="#粗排阶段三种：" class="headerlink" title="粗排阶段三种："></a>粗排阶段三种：</h4><ul>
+<li>rank_size数过大，建议减少rank_size数量，可能会影响效果，需业务方评估；</li>
+<li>rank_size数量合理，但粗排阶段耗时占比超过50%，检查海选插件的性能；</li>
+<li>正排过滤改为倒排召回，对于特定场景有很大作用，第四部分会讲到具体case；</li>
 </ul>
-<p>问：6.java代码编译的结果？</p>
-<p>答：是字节码文件.class</p>
-<p>问：7.Java中的static变量和static方法在vJVM运行中的内存分配有什么不同？</p>
-<p>答：<br>比较条目 | 静态对象 | 非静态对象<br>—-|——|—-<br>拥有属性： | 是类共同拥有的  | 是类各对象独立拥有的<br>内存分配： | 内存空间上是固定的  | 空间在各个附属类里面分配<br>分配顺序： | 先分配静态对象的空间  | 继而再对非静态对象分配空间，初始化顺序是先静态</p>
-<p>问：8.在heap中没有类实例的时候，类信息还存在于JVM吗？ 存在于什么地方？</p>
-<p>答：存在，应该是在方法区，包括类信息和常量等，对象的引用在java虚拟机栈中。</p>
+<h4 id="精排阶段一种："><a href="#精排阶段一种：" class="headerlink" title="精排阶段一种："></a>精排阶段一种：</h4><ul>
+<li>战马耗时占比超过50%，建议检查战马相关插件的性能。</li>
+</ul>
+<p>目前的优化手段在tisplus2平台上进行透出，点击优化可以看到诊断具体慢query的优化建议，如果上述四条建议条件均不满足，则需要联系平台管理员具体诊断下慢的原因了。</p>
+<h2 id="四、优化的收益"><a href="#四、优化的收益" class="headerlink" title="四、优化的收益"></a>四、优化的收益</h2><p>第四部分介绍下采用上述优化带来的效果，某应用采用正排过滤改为倒排召回的优化，采用此优化的前提是：1.swift消息无update消息；2.对应字段是可枚举类型；3.非子doc并且seek数远大于match数。采用此优化之后，慢query数直线下降，由百万级别降到0，且容量预估提升了8倍（即相同资源可抗的访问量上涨了8倍）。</p>
+<h2 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h2><p>目前慢query的优化功能已上线，用户可以自行查看应用的访问状况和访问较慢的query，并针对性的进行分析和初步的优化，相比较之前是一个从无到有的过程。但是目前的慢query分析还有很多可以优化的地方，比如优化建议的丰富、慢query的自动优化以及实时慢query的分析等，目前的慢query分析已经能起到一定的问题诊断和优化的作用了，未来还需要持续的挖掘和深入。如果你对数据分析和引擎优化方面有心得，欢迎与我交流，也欢迎有才的你加入搜索事业部。</p>
+<p><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/d54adf49e120eff1c067bc9ca3ce81a6.png" alt="image.png"></p>
 
       
     </div>
@@ -416,9 +408,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/GC/" rel="tag"># GC</a>
-          
-            <a href="/tags/G1/" rel="tag"># G1</a>
+            <a href="/tags/Hawkeye/" rel="tag"># Hawkeye</a>
           
         </div>
       
@@ -431,8 +421,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/06/24/jvm-类加载/" rel="next" title="jvm 类加载">
-                <i class="fa fa-chevron-left"></i> jvm 类加载
+              <a href="/2018/03/16/Hawkeye-助力TISPLUS实现数据化运营/" rel="next" title="Hawkeye:助力TISPLUS实现数据化运营">
+                <i class="fa fa-chevron-left"></i> Hawkeye:助力TISPLUS实现数据化运营
               </a>
             
           </div>
@@ -441,8 +431,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/03/16/Hawkeye-助力TISPLUS实现数据化运营/" rel="prev" title="Hawkeye:助力TISPLUS实现数据化运营">
-                Hawkeye:助力TISPLUS实现数据化运营 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/11/13/hello-world/" rel="prev" title="Hexo使用">
+                Hexo使用 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -474,8 +464,8 @@
 
   
     <div class="comments" id="comments">
-      <div class="ds-thread" data-thread-key="2017/06/24/jvm-垃圾回收/"
-           data-title="jvm 垃圾回收" data-url="http://yoursite.com/2017/06/24/jvm-垃圾回收/">
+      <div class="ds-thread" data-thread-key="2018/03/16/Hawkeye-TopN慢query的获取与优化/"
+           data-title="Hawkeye:TopN慢query的获取与优化" data-url="http://yoursite.com/2018/03/16/Hawkeye-TopN慢query的获取与优化/">
       </div>
     </div>
 
@@ -502,8 +492,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -604,6 +603,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、背景"><span class="nav-number">1.</span> <span class="nav-text">一、背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、TopN慢查询获取流程"><span class="nav-number">2.</span> <span class="nav-text">二、TopN慢查询获取流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、慢query的优化手段"><span class="nav-number">3.</span> <span class="nav-text">三、慢query的优化手段</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#粗排阶段三种："><span class="nav-number">3.0.1.</span> <span class="nav-text">粗排阶段三种：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#精排阶段一种："><span class="nav-number">3.0.2.</span> <span class="nav-text">精排阶段一种：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、优化的收益"><span class="nav-number">4.</span> <span class="nav-text">四、优化的收益</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、总结"><span class="nav-number">5.</span> <span class="nav-text">五、总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
